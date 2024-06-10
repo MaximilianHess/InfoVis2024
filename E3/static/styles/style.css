@@ -1,0 +1,109 @@
+@font-face {
+  font-family: 'Formula1-Regular';
+  src: url('/static/styles/fonts/Formula1-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Formula1-Bold';
+  src: url('/static/styles/fonts/Formula1-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Formula1-Regular', sans-serif;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Use the full height of the viewport */
+  margin: 0; /* Remove default margin */
+}
+
+.title {
+  text-align: center; 
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.title h1{
+  font-family: 'Formula1-Bold';
+  font-size: 18px;
+
+}
+
+.title h2 {
+  font-family: 'Formula1-Regular';
+  font-size: 15px;
+}
+
+#globe {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;  /*  viewport width */
+  height: 80vh; /*  viewport height */
+}
+
+#globe_tooltip {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8); /* semi-transparent white background */
+  border: 1px solid black;
+  border-radius: 10px; /* rounded corners */
+  padding: 10px; 
+  display: none;
+  pointer-events: none; /* prevent tooltip from interfering with mouse events */
+  z-index: 10; /* ensure tooltip is on top */
+  font-size: 12px;
+  font-family: 'Formula1-Bold', sans-serif; 
+}
+
+.tooltip-bold {
+  font-family: 'Formula1-Bold', sans-serif;
+}
+
+.tooltip-regular {
+  font-family: 'Formula1-Regular', sans-serif;
+}
+
+#container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Use the full height of the viewport */
+  margin: 0; /* Remove default margin */
+}
+
+#slider-container {
+  display: flex;
+  align-items: center;
+}
+
+#slider {
+  width: 130px; /* height of the slider */
+  height: 100px; /* width of the slider */
+  margin-right: 0px; /* margin */
+  transform: rotate(90deg); /* Rotate the slider vertically */
+}
+
+#years-labels {
+  display: inline-block; /* Display the labels container as an inline-block */
+  vertical-align: top; /* Align the labels to the top of the slider */
+  margin-left: 0px; /* Adjust margin as needed */
+}
+
+.year-label {
+  text-align: left;
+  margin-top: 7px;
+}
+
+.year-label.bold {
+  font-family: 'Formula1-Bold', sans-serif;
+}
+
+.year-label.normal {
+  color: black;
+}

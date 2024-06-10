@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- header -->
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project</title>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+</head>
+
+<body>
+
+  <div class="title">
+    <h1>Formula 1</h1>
+    <h2>Exploratory Analysis</h2>
+</div>
+
+  
+<div id="container">
+  <div id="slider-container">
+    <div id="slider"></div>
+    <div id="years-labels"></div>
+  </div>
+  <div id="globe"></div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script type="module" src="../static/js/globe.js"></script>
+
+<script type="module">
+  import { init_globe } from "../static/js/globe.js";
+
+  const globe_data = {{ globe_data | safe }};
+  const circuit_data = {{ circuit_data | safe }};
+
+  init_globe(globe_data, circuit_data);
+
+  // update circuit data
+  function updateCircuitData(season) {
+    fetch(`/update_circuit_data/${season}`)
+        .then(response => response.json())
+        .then(data => {
+            // Update globe visualization with new data
+            init_globe(globe_data, data); // Pass data directly without parsing
+        })
+        .catch(error => {
+            console.error('Error updating circuit data:', error);
+        });
+}
+</script>
+
+</body>
+
+</html>
