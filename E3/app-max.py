@@ -6,7 +6,6 @@ import numpy as np
 import polars as pl
 import json
 
-
 app = Flask(__name__)
 
 # Global variable to speed up queries
