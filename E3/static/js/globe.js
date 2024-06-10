@@ -104,17 +104,15 @@ function render_globe(globe_data, circuit_data) {
                 ];
                 projection.rotate(newRotation);
     
-                // Update pins' positions and visibility only if continueWorldTour is false
-                if (!rotationAllowed) {
+                // Update pins' positions and visibility 
                     svg.selectAll(".pin")
                         .attr("transform", function(d) {
                             const coords = [d.long, d.lat];
                             const visibility = isInView(projection, coords) ? "visible" : "hidden";
                             return "translate(" + projection(coords) + ") scale(" + (visibility === "visible" ? 1 : 0) + ")";
                         });
-                }
     
-                path = d3.geoPath().projection(projection);
+              //  path = d3.geoPath().projection(projection);
     
                 svg.selectAll("path").attr("d", path); // redraw all paths with the new projection
             }
@@ -125,7 +123,7 @@ function render_globe(globe_data, circuit_data) {
             // update the scale of the projection based on zoom level
             if (event.transform.k > 0.3) {
                 projection.scale(initialScale * event.transform.k);
-                path = d3.geoPath().projection(projection);
+                //path = d3.geoPath().projection(projection);
                 svg.selectAll("path").attr("d", path); // redraw all paths with the new scale
                 globe.attr("r", projection.scale()); // update the globe's radius
 
@@ -162,7 +160,7 @@ function render_globe(globe_data, circuit_data) {
             .on("mouseout", function() {
                 globe_tooltip.style("display", "none");
             });
-    
+        
         // Function to check if a point is within the visible area of the globe
         function isInView(projection, coords) {
             const [x, y] = projection(coords);
@@ -241,15 +239,15 @@ function render_globe(globe_data, circuit_data) {
         render_globe(globe_data, circuit_data);
     }
     
-    async function worldTour(circuit_data, projection) {
+    async function worldTour(circuitData, projection) {
         const tilt = 20;
         const duration = 2000; // Increase duration for smoother animation
     
-        for (let i = 0; i < circuit_data.length - 1; i++) {
-            if (!rotationAllowed) break; // check if animation should stop
+        for (let i = 0; i < circuitData.length - 1; i++) {
+            if (!rotationAllowed) break; // Check if animation should stop
     
-            const p1 = [circuit_data[i].long, circuit_data[i].lat];
-            const p2 = [circuit_data[i + 1].long, circuit_data[i + 1].lat];
+            const p1 = [circuitData[i].long, circuitData[i].lat];
+            const p2 = [circuitData[i + 1].long, circuitData[i + 1].lat];
     
             const r1 = [-p1[0], tilt - p1[1], 0];
             const r2 = [-p2[0], tilt - p2[1], 0];
@@ -260,15 +258,28 @@ function render_globe(globe_data, circuit_data) {
             await d3.transition()
                 .duration(duration)
                 .tween("rotate", () => t => {
-                    if (!rotationAllowed) return; // check if animation should stop
+                    if (!rotationAllowed) return; // Check if animation should stop
                     projection.rotate(iv(t));
+    
                     // Redraw all paths with the updated projection
                     svg.selectAll("path").attr("d", path);
+                    // Update pins' positions and visibility
+                    updatePins(projection);
                     // Render the lines
                     renderLines({ type: "LineString", coordinates: [p1, ip(t)] });
                 })
                 .end();
         }
+    }
+    
+    // Update pin positions and visibility
+    function updatePins(projection) {
+        svg.selectAll(".pin")
+            .attr("transform", d => {
+                const coords = [d.long, d.lat];
+                const visibility = isInView(projection, coords) ? "visible" : "hidden";
+                return `translate(${projection(coords)}) scale(${visibility === "visible" ? 1 : 0})`;
+            });
     }
     
     function renderLines(arc) {
