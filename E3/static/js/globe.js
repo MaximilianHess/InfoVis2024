@@ -15,8 +15,8 @@ function set_year(year) {
 
 
 // init function that is called by the backend at the start 
-function init_globe(globe_data, circuit_data) {
-    render_globe(globe_data, circuit_data);
+function init_globe(globe_data, circuit_geo_data) {
+    render_globe(globe_data, circuit_geo_data);
 }
 
 // CONSTANTS
@@ -37,10 +37,10 @@ const DOT_RADIUS = 5;
 const DRAG_SENSITIVITY = 50;
 
 // main rendering function for the globe
-function render_globe(globe_data, circuit_data) {
+function render_globe(globe_data, circuit_geo_data) {
 
     // mapping circuit location data to the world data
-    const circuit_countries = new Set(circuit_data.map(data => data.country)); 
+    const circuit_countries = new Set(circuit_geo_data.map(data => data.country)); 
     // tooltip
     const globe_tooltip = d3.select("body")
         .append("div")
@@ -141,7 +141,7 @@ function render_globe(globe_data, circuit_data) {
 
     
         svg.selectAll(".pin")
-            .data(circuit_data)
+            .data(circuit_geo_data)
             .enter().append("circle")
             .attr("class", "pin")
             .attr("r", DOT_RADIUS)
@@ -221,11 +221,11 @@ function render_globe(globe_data, circuit_data) {
     
     function updateData(selectedYear) {
         return new Promise((resolve, reject) => {
-            d3.json(`/update_circuit_data/${selectedYear}`)
-                .then(function(circuit_data) {
+            d3.json(`/update_circuit_geo_data/${selectedYear}`)
+                .then(function(circuit_geo_data) {
                     // Call a function to update globe visualization with new data
-                    updateGlobe(globe_data, circuit_data);
-                    resolve(circuit_data); // Resolve the promise with the updated data
+                    updateGlobe(globe_data, circuit_geo_data);
+                    resolve(circuit_geo_data); // Resolve the promise with the updated data
                 })
                 .catch(function(error) {
                     console.error("Error updating data:", error);
@@ -236,23 +236,24 @@ function render_globe(globe_data, circuit_data) {
     
     initSlider();
     
-    function updateGlobe(globe_data, circuit_data) {
+    function updateGlobe(globe_data, circuit_geo_data) {
         // remove existing elements from the svg
         d3.select('#globe').selectAll("*").remove();
         // re-render the globe with the new data
-        render_globe(globe_data, circuit_data);
+        render_globe(globe_data, circuit_geo_data);
     }
     
-    async function worldTour(circuit_data, projection) {
+    // modified template: https://observablehq.com/@d3/world-tour?intent=fork
+    async function worldTour(circuit_geo_data, projection) {
 
         const tilt = 20;
         const duration = 2000; // Increase duration for smoother animation
     
-        for (let i = 0; i < circuit_data.length - 1; i++) {
+        for (let i = 0; i < circuit_geo_data.length - 1; i++) {
             if (!rotationAllowed) break; // Check if animation should stop
     
-            const p1 = [circuit_data[i].long, circuit_data[i].lat];
-            const p2 = [circuit_data[i + 1].long, circuit_data[i + 1].lat];
+            const p1 = [circuit_geo_data[i].long, circuit_geo_data[i].lat];
+            const p2 = [circuit_geo_data[i + 1].long, circuit_geo_data[i + 1].lat];
     
             const r1 = [-p1[0], tilt - p1[1], 0];
             const r2 = [-p2[0], tilt - p2[1], 0];
@@ -298,8 +299,9 @@ function render_globe(globe_data, circuit_data) {
     }
     
     // Start the world tour
-    worldTour(circuit_data, projection);}
+    worldTour(circuit_geo_data, projection);}
 
+// template: https://observablehq.com/@d3/world-tour?intent=fork
 class Versor {
     static fromAngles([l, p, g]) {
       l *= Math.PI / 360;
