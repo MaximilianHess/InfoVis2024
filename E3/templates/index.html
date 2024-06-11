@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- header -->
-
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project</title>
@@ -13,77 +10,105 @@
 
 <body>
 
-  <div class="title">
-    <h1>Formula 1</h1>
-    <h2>Exploratory Analysis</h2>
-</div>
 
-  
-<div id="container">
-  <div id="slider-container">
-    <div id="slider"></div>
-    <div id="years-labels"></div>
+  <div id="start_page">
+    
+    <div class="title">
+      <h1>Formula 1</h1>
+      <h2>Exploratory Analysis</h2>
+    </div>
+
+    <div id="globe_container">
+      <div id="slider-container">
+        <div id="slider"></div>
+        <div id="years-labels"></div>
+      </div>
+      <div id="globe"></div>
+      <!-- Example button to switch to race page -->
+      <button id="switch_to_race_page">Go to Race Page</button>
+    </div>
   </div>
-  <div id="globe"></div>
-</div>
 
+  <div id="race_page">
+    <div id="circuit_container">
+      <div id="circuit"></div>
+      <select id="selectCircuit"></select>
+      <select name="select_year" id="select_year"></select>
+      <button id="start_race">(Re-) Start Race</button>
+      <button id="stop_race">Stop Race</button>
+      <button id="resume_race">Resume Race</button>
+      <div id="lap_display"></div>
+      <div class="slider">
+        <label for="speedSlider">Race speed: </label>
+        <input type="range" id="speedSlider" min="-270" max="-2" value="-20">
+      </div>
+      <div class="slider">
+        <label for="lapSlider">Select lap:</label>
+        <input type="range" name="lapSlider" id="lapSlider" min=1 max=30 value=1>
+      </div>
+      <div id="pos_plot"></div>
+      <!-- Button to go back to start page -->
+      <button id="switch_to_start_page">Go to Start Page</button>
+    </div>
+  </div>
 
-<div id="circuit"></div>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script type="module" src="../static/js/globe.js"></script>
+  <script type="module" src="../static/js/circuit.js"></script>
+  <script type="module" src="../static/js/positions.js"></script>
 
-<select id="selectCircuit"></select>
-<select name="select_year" id="select_year"></select>
+  <script type="module">
+    import { init_globe } from "../static/js/globe.js";
 
-<button id="start_race">(Re-) Start Race</button>
-<button id="stop_race">Stop Race</button>
-<button id="resume_race">Resume Race</button>
+    const globe_data = {{ globe_data | safe }};
+    const circuit_geo_data = {{ circuit_geo_data | safe }};
 
-<div id="lap_display"></div>
+    init_globe(globe_data, circuit_geo_data);
 
-<div class="slider">
-    <label for="speedSlider">Renngeschwindigkeit: </label>
-    <input type="range" id="speedSlider" min="-270" max="-2" value="-20">
-</div>
-
-<div class="slider">
-    <label for="lapSlider">Rennrunde:</label>
-    <input type="range" name="lapSlider" id="lapSlider" min=1 max = 30 value = 1>
-</div>
-
-<div id="pos_plot"></div>
-
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script type="module" src="../static/js/globe.js"></script>
-<script type="module" src="../static/js/circuit.js"></script>
-<script type="module" src="../static/js/positions.js"></script>
-
-<script type="module">
-  import { init_globe } from "../static/js/globe.js";
-
-  const globe_data = {{ globe_data | safe }};
-  const circuit_geo_data = {{ circuit_geo_data | safe }};
-
-  init_globe(globe_data, circuit_geo_data);
-
-  // update circuit data
-  function updateCircuitData(season) {
-    fetch(`/update_circuit_geo_data/${season}`)
+    // update circuit data
+    function updateCircuitData(season) {
+      fetch(`/update_circuit_geo_data/${season}`)
         .then(response => response.json())
         .then(data => {
-            // Update globe visualization with new data
-            init_globe(globe_data, data); // Pass data directly without parsing
+          // Update globe visualization with new data
+          init_globe(globe_data, data); // Pass data directly without parsing
         })
         .catch(error => {
-            console.error('Error updating circuit data:', error);
+          console.error('Error updating circuit data:', error);
         });
-}
-</script>
+    }
+  </script>
 
-<script type="module">
-  import { init_circuit } from "../static/js/circuit.js"
-  import { init_pos_plot } from "../static/js/positions.js"
-  init_pos_plot()
-  init_circuit({{ circuit_data | safe }})
-</script>
+  <script type="module">
+    import { init_circuit } from "../static/js/circuit.js";
+    import { init_pos_plot } from "../static/js/positions.js";
+    init_pos_plot();
+    init_circuit({{ circuit_data | safe }});
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Initially display the start page and hide the race page
+      document.getElementById('start_page').style.display = 'flex';
+      document.getElementById('race_page').style.display = 'none';
+
+      // Function to switch to the race page
+      function showRacePage() {
+        document.getElementById('start_page').style.display = 'none';
+        document.getElementById('race_page').style.display = 'flex';
+      }
+
+      // Function to switch to the start page
+      function showStartPage() {
+        document.getElementById('race_page').style.display = 'none';
+        document.getElementById('start_page').style.display = 'flex';
+      }
+
+      // Add event listeners to the buttons
+      document.getElementById('switch_to_race_page').addEventListener('click', showRacePage);
+      document.getElementById('switch_to_start_page').addEventListener('click', showStartPage);
+    });
+  </script>
 
 </body>
 

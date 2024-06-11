@@ -11,14 +11,30 @@
   font-weight: bold;
   font-style: normal;
 }
+/* Ensure both pages are absolutely positioned within a parent container */
+#start_page, #race_page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none; /* Initially hide both */
+}
+
+#start_page {
+  display: flex; /* Show the start page initially */
+  justify-content: center; 
+  align-items: center; 
+}
 
 body {
   font-family: 'Formula1-Regular', sans-serif;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 100vh; /* Use the full height of the viewport */
-  margin: 0; /* Remove default margin */
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh; 
+  margin: 0; 
+  position: relative; /* Ensure body acts as a positioning context */
 }
 
 .title {
@@ -29,10 +45,9 @@ body {
   justify-content: center; 
 }
 
-.title h1{
+.title h1 {
   font-family: 'Formula1-Bold';
   font-size: 18px;
-
 }
 
 .title h2 {
@@ -44,19 +59,19 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80vw;  /*  viewport width */
-  height: 80vh; /*  viewport height */
+  width: 80vw;
+  height: 80vh;
 }
 
 #globe_tooltip {
   position: absolute;
-  background: rgba(255, 255, 255, 0.8); /* semi-transparent white background */
+  background: rgba(255, 255, 255, 0.8); 
   border: 1px solid black;
-  border-radius: 10px; /* rounded corners */
+  border-radius: 10px;
   padding: 10px; 
   display: none;
-  pointer-events: none; /* prevent tooltip from interfering with mouse events */
-  z-index: 10; /* ensure tooltip is on top */
+  pointer-events: none; 
+  z-index: 10; 
   font-size: 12px;
   font-family: 'Formula1-Bold', sans-serif; 
 }
@@ -69,12 +84,12 @@ body {
   font-family: 'Formula1-Regular', sans-serif;
 }
 
-#container {
+#globe_container {
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  height: 100vh; /* Use the full height of the viewport */
-  margin: 0; /* Remove default margin */
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh; 
+  margin: 0; 
 }
 
 #slider-container {
@@ -83,16 +98,16 @@ body {
 }
 
 #slider {
-  width: 130px; /* height of the slider */
-  height: 100px; /* width of the slider */
-  margin-right: 0px; /* margin */
-  transform: rotate(90deg); /* Rotate the slider vertically */
+  width: 130px; 
+  height: 100px; 
+  margin-right: 0px; 
+  transform: rotate(90deg); 
 }
 
 #years-labels {
-  display: inline-block; /* Display the labels container as an inline-block */
-  vertical-align: top; /* Align the labels to the top of the slider */
-  margin-left: 0px; /* Adjust margin as needed */
+  display: inline-block; 
+  vertical-align: top; 
+  margin-left: 0px; 
 }
 
 .year-label {

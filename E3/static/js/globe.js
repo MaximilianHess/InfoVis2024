@@ -1,16 +1,23 @@
 // exports and imports for the module
-export { init_globe, set_year };
+export { init_globe, pass_year, pass_circuit };
 
 // global variable to track rotation permission
 let rotationAllowed = true;
 
 // global variables for connection
 let selectedYear_global;
+let selectedCircuit_global;
 
 // setter function for year
-function set_year(year) {
+function pass_year(year) {
     selectedYear_global = year;
     console.log(selectedYear_global);
+}
+
+// setter function for the circuit
+function pass_circuit(circuit) {
+    selectedCircuit_global = circuit;
+    console.log(selectedCircuit_global);
 }
 
 
@@ -159,7 +166,13 @@ function render_globe(globe_data, circuit_geo_data) {
             })
             .on("mouseout", function() {
                 globe_tooltip.style("display", "none");
+            })
+            .on("mousedown", function(event, d) {
+                setTimeout(function() {
+                    pass_circuit(d.circuitId);
+                }, 250); 
             });
+
         
         // Function to check if a point is within the visible area of the globe
         function isInView(projection, coords) {
@@ -195,7 +208,7 @@ function render_globe(globe_data, circuit_geo_data) {
                 const selectedYear = years[selectedYearIndex];
                 updateData(selectedYear); // update data based on selected year
                 updateLabels(selectedYearIndex); 
-                set_year(selectedYear);  // write global var
+                pass_year(selectedYear);  // write global var
             });
     
         // Append the year labels

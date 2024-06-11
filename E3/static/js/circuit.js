@@ -1,5 +1,5 @@
-export { init_circuit, set_circuit_sasha }
-import { set_year } from "./globe.js";
+export { init_circuit, set_circuit_connect }
+import { pass_year, pass_circuit } from "./globe.js";
 import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot } from "./positions.js";
 
 // Global Variables
@@ -156,7 +156,7 @@ function set_circuit(circuit_data) {
     })
 }
 
-function set_circuit_sasha(circuit, year) {
+function set_circuit_connect(circuit, year) {
     selected_round = circuit
     selected_year = year
     update_circuit(temp_global_circuit_data)

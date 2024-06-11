@@ -5,9 +5,7 @@ import polars as pl
 from sklearn import decomposition, preprocessing
 import numpy as np
 import fastf1
-import json
-#from fastf1.ergast import Ergast
-#ergast = Ergast()   # connection to Ergast API 
+import json 
 
 app = Flask(__name__)
 
