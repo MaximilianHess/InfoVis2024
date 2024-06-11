@@ -220,14 +220,18 @@ function render_globe(globe_data, circuit_data) {
     }
     
     function updateData(selectedYear) {
-        d3.json(`/update_circuit_data/${selectedYear}`)
-            .then(function(circuit_data) {
-                // Call a function to update globe visualization with new data
-                updateGlobe(globe_data, circuit_data);
-            })
-            .catch(function(error) {
-                console.error("Error updating data:", error);
-            });
+        return new Promise((resolve, reject) => {
+            d3.json(`/update_circuit_data/${selectedYear}`)
+                .then(function(circuit_data) {
+                    // Call a function to update globe visualization with new data
+                    updateGlobe(globe_data, circuit_data);
+                    resolve(circuit_data); // Resolve the promise with the updated data
+                })
+                .catch(function(error) {
+                    console.error("Error updating data:", error);
+                    reject(error); // Reject the promise with the error
+                });
+        });
     }
     
     initSlider();
@@ -240,6 +244,7 @@ function render_globe(globe_data, circuit_data) {
     }
     
     async function worldTour(circuit_data, projection) {
+
         const tilt = 20;
         const duration = 2000; // Increase duration for smoother animation
     
@@ -283,7 +288,7 @@ function render_globe(globe_data, circuit_data) {
     }
     
     function renderLines(arc) {
-    
+
         svg.append('path')
             .datum(arc)
             .attr('d', path)

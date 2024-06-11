@@ -14,9 +14,6 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Load data once at startup
-df_circuits_geo = pd.read_csv("static/data/circuit_geo.csv")
-df_circuits = pd.read_parquet("static/data/all_tracks_new.parquet")
-circuit_data = df_circuits.merge(df_circuits_geo, left_on='circuit_code', right_on='circuitId', how='left')
 
 def get_world_data():
     with open('static/data/world.json', 'r') as file:
@@ -24,14 +21,14 @@ def get_world_data():
     return data
 
 def get_circuit_data(season):
-    data = ergast.get_circuits(season=season, result_type='pandas')  
-    data = data.to_json(orient="records")
-    return data
+    circuit_data = pd.read_csv("static/data/circuit_data.csv")
+    data = circuit_data.loc[circuit_data["year"] == season]
+    data_json = data.to_json(orient="records")
+    return data_json
 
 @app.route("/update_circuit_data/<int:season>")
 def update_circuit_data(season):
-    data = ergast.get_circuits(season=season, result_type='pandas')  
-    return jsonify(data.to_dict(orient="records"))
+    return get_circuit_data(season)
 
 @app.route("/")
 def index():
