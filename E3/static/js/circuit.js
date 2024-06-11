@@ -1,4 +1,4 @@
-export { init_circuit, set_circuit_connect }
+export { init_circuit, update_race_data_and_race }
 import { pass_year, pass_circuit } from "./globe.js";
 import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot } from "./positions.js";
 
@@ -128,7 +128,6 @@ function animate_race(index) {
             stop_race()
         }
 
-
     }
 
 
@@ -156,11 +155,13 @@ function set_circuit(circuit_data) {
     })
 }
 
-function set_circuit_connect(circuit, year) {
-    selected_round = circuit
-    selected_year = year
+/*function set_circuit_connect(circuit, year) {
+    selected_round = pass_circuit(circuit);
+    selected_year = pass_year(year);
+    //selected_round = circuit
+    //selected_year = year
     update_circuit(temp_global_circuit_data)
-}
+}*/
 
 
 function update_circuit(circuit_data) {

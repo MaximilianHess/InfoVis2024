@@ -5,18 +5,18 @@ export { init_globe, pass_year, pass_circuit };
 let rotationAllowed = true;
 
 // global variables for connection
-let selectedYear_global;
-let selectedCircuit_global;
+window.selectedYear_global = 2020;
+window.selectedCircuit_global = 1;
 
 // setter function for year
 function pass_year(year) {
-    selectedYear_global = year;
+    window.selectedYear_global = year;
     console.log(selectedYear_global);
 }
 
 // setter function for the circuit
 function pass_circuit(circuit) {
-    selectedCircuit_global = circuit;
+    window.selectedCircuit_global = circuit;
     console.log(selectedCircuit_global);
 }
 
@@ -169,7 +169,8 @@ function render_globe(globe_data, circuit_geo_data) {
             })
             .on("mousedown", function(event, d) {
                 setTimeout(function() {
-                    pass_circuit(d.circuitId);
+                    pass_circuit(d.round_number);
+                    //update_race_data_and_race(selectedYear_global, d.round_number);
                 }, 250); 
             });
 

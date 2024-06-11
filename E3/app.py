@@ -107,7 +107,7 @@ def update_race_data(year, round_number):
     )
 
     # Group by the required columns
-    grouped = df_race_data.groupby(["driver_number", "year", "round_number"]).agg(
+    grouped = df_race_data.group_by(["driver_number", "year", "round_number"]).agg(
         [
             pl.col("TeamName").first().alias("team_name"),
             pl.col("TeamColor").first().alias("team_color"),
