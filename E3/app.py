@@ -8,10 +8,15 @@ from fastf1.ergast import Ergast
 ergast = Ergast()   # connection to Ergast API 
 app = Flask(__name__)
 
-# prevent caching the elements in the browser
+# Prevent caching the elements in the browser
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
-# show changes without restarting the Flask server
+# Show changes without restarting the Flask server
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+# Load data once at startup
+df_circuits_geo = pd.read_csv("static/data/circuit_geo.csv")
+df_circuits = pd.read_parquet("static/data/all_tracks_new.parquet")
+circuit_data = df_circuits.merge(df_circuits_geo, left_on='circuit_code', right_on='circuitId', how='left')
 
 def get_world_data():
     with open('static/data/world.json', 'r') as file:
@@ -25,19 +30,16 @@ def get_circuit_data(season):
 
 @app.route("/update_circuit_data/<int:season>")
 def update_circuit_data(season):
-    data = ergast.get_circuits(season=season, result_type='pandas')
+    data = ergast.get_circuits(season=season, result_type='pandas')  
     return jsonify(data.to_dict(orient="records"))
 
-
-# the route leads to the main and the only page we are using for the project
 @app.route("/")
-# define the index function which will render the html file
-# the function fetches the data on the server using the getter functions defined above
 def index():
     globe_data = get_world_data()
     circuit_data = get_circuit_data(2020)  # Initial data for the default season
+    
     return render_template("index.html", globe_data=globe_data, circuit_data=circuit_data)
 
-# initiate the server in debug mode
+# Initiate the server in debug mode
 if __name__ == "__main__":
     app.run(debug=True)

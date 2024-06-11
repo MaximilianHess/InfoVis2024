@@ -1,0 +1,31 @@
+circuitId,circuitName,long,lat,locality,country
+bahrain,Bahrain International Circuit,50.5106,26.0325,Sakhir,Bahrain
+catalunya,Circuit de Barcelona-Catalunya,2.26111,41.57,Montmeló,Spain
+hungaroring,Hungaroring,19.2486,47.5789,Budapest,Hungary
+imola,Autodromo Enzo e Dino Ferrari,11.7167,44.3439,Imola,Italy
+istanbul,Istanbul Park,29.405,40.9517,Istanbul,Turkey
+monza,Autodromo Nazionale di Monza,9.28111,45.6156,Monza,Italy
+mugello,Autodromo Internazionale del Mugello,11.3719,43.9975,Mugello,Italy
+nurburgring,Nürburgring,6.9475,50.3356,Nürburg,Germany
+portimao,Autódromo Internacional do Algarve,-8.6267,37.227,Portimão,Portugal
+red_bull_ring,Red Bull Ring,14.7647,47.2197,Spielberg,Austria
+silverstone,Silverstone Circuit,-1.01694,52.0786,Silverstone,UK
+sochi,Sochi Autodrom,39.9578,43.4057,Sochi,Russia
+spa,Circuit de Spa-Francorchamps,5.97139,50.4372,Spa,Belgium
+yas_marina,Yas Marina Circuit,54.6031,24.4672,Abu Dhabi,UAE
+americas,Circuit of the Americas,-97.6411,30.1328,Austin,USA
+baku,Baku City Circuit,49.8533,40.3725,Baku,Azerbaijan
+interlagos,Autódromo José Carlos Pace,-46.6997,-23.7036,São Paulo,Brazil
+jeddah,Jeddah Corniche Circuit,39.1044,21.6319,Jeddah,Saudi Arabia
+losail,Losail International Circuit,51.4542,25.49,Al Daayen,Qatar
+monaco,Circuit de Monaco,7.42056,43.7347,Monte-Carlo,Monaco
+ricard,Circuit Paul Ricard,5.79167,43.2506,Le Castellet,France
+rodriguez,Autódromo Hermanos Rodríguez,-99.0907,19.4042,Mexico City,Mexico
+zandvoort,Circuit Park Zandvoort,4.54092,52.3888,Zandvoort,Netherlands
+albert_park,Albert Park Grand Prix Circuit,144.968,-37.8497,Melbourne,Australia
+marina_bay,Marina Bay Street Circuit,103.864,1.2914,Marina Bay,Singapore
+miami,Miami International Autodrome,-80.2389,25.9581,Miami,USA
+suzuka,Suzuka Circuit,136.541,34.8431,Suzuka,Japan
+villeneuve,Circuit Gilles Villeneuve,-73.5228,45.5,Montreal,Canada
+vegas,Las Vegas Strip Street Circuit,-115.173,36.1147,Las Vegas,United States
+shanghai,Shanghai International Circuit,121.22,31.3389,Shanghai,China

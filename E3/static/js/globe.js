@@ -239,15 +239,15 @@ function render_globe(globe_data, circuit_data) {
         render_globe(globe_data, circuit_data);
     }
     
-    async function worldTour(circuitData, projection) {
+    async function worldTour(circuit_data, projection) {
         const tilt = 20;
         const duration = 2000; // Increase duration for smoother animation
     
-        for (let i = 0; i < circuitData.length - 1; i++) {
+        for (let i = 0; i < circuit_data.length - 1; i++) {
             if (!rotationAllowed) break; // Check if animation should stop
     
-            const p1 = [circuitData[i].long, circuitData[i].lat];
-            const p2 = [circuitData[i + 1].long, circuitData[i + 1].lat];
+            const p1 = [circuit_data[i].long, circuit_data[i].lat];
+            const p2 = [circuit_data[i + 1].long, circuit_data[i + 1].lat];
     
             const r1 = [-p1[0], tilt - p1[1], 0];
             const r2 = [-p2[0], tilt - p2[1], 0];
