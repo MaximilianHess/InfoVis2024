@@ -113,6 +113,7 @@ function resume_race() {
     animate_race(global_index)
 }
 
+
 function animate_race(index) {
 
     function update(i) {
@@ -160,15 +161,6 @@ function set_circuit() {
         update_race_data_and_race(selected_year, selected_round)
     })
 }
-
-/*function set_circuit_connect(circuit, year) {
-    selected_round = pass_circuit(circuit);
-    selected_year = pass_year(year);
-    //selected_round = circuit
-    //selected_year = year
-    update_circuit(global_circuit_data)
-}*/
-
 
 function update_circuit() {
     var filtered_circuit_data = global_circuit_data.filter(function (d) {
@@ -243,18 +235,38 @@ function update_race_data_and_race(selected_year, selected_round) {
         });
 }
 
+// driver tooltip
+const driver_tooltip = d3.select("body")
+  .append("div")
+  .attr("id", "driver_tooltip")
+  .attr("class", "tooltip");
+
 function update_race(race_data) {
-    stop_race()
-    svg.selectAll("circle").remove()
-    driver_dots = svg.selectAll("circle")
-        .data(race_data)
-        .enter()
-        .append("circle")
-        .attr("cx", d => x_scale(d.positions[0].x))
-        .attr("cy", d => y_scale(d.positions[0].y))
-        .attr("r", 5)
-        .style("fill", d => `#${d.team_color}`)
+  stop_race();
+  svg.selectAll("circle").remove();
+
+  driver_dots = svg.selectAll("circle")
+    .data(race_data)
+    .enter()
+    .append("circle")
+    .attr("cx", d => x_scale(d.positions[0].x))
+    .attr("cy", d => y_scale(d.positions[0].y))
+    .attr("r", 5)
+    .style("fill", d => `#${d.team_color}`)
+    .on("mouseover", function(event, d) {
+        // Calculate the tooltip position
+        const [x, y] = d3.pointer(event);
+        driver_tooltip
+            .style("left", `${x + 30}px`)
+            .style("top", `${y + 10}px`)  
+            .style("display", "block")
+            .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
+    })
+    .on("mouseout", function() {
+        driver_tooltip.style("display", "none");
+    });
 }
+
 
 function calculate_width_and_height(circuit_data) {
 

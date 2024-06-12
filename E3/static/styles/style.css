@@ -76,12 +76,26 @@ body {
   font-family: 'Formula1-Bold', sans-serif; 
 }
 
+
 .tooltip-bold {
   font-family: 'Formula1-Bold', sans-serif;
 }
 
 .tooltip-regular {
   font-family: 'Formula1-Regular', sans-serif;
+}
+
+#driver_tooltip {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8); 
+  border: none;
+  border-radius: 10px;
+  padding: 10px; 
+  display: none;
+  pointer-events: none; 
+  z-index: 10; 
+  font-size: 12px;
+  font-family: 'Formula1-Bold', sans-serif; 
 }
 
 #globe_container {

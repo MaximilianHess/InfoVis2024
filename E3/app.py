@@ -52,18 +52,18 @@ def update_race_data(year, round_number):
 
     df_race_data = pl.scan_parquet("./static/data/race_data.parquet")
     df_driver_data = pl.scan_parquet("./static/data/all_driver_data.parquet")
-
     df_lap_data = pl.scan_parquet("./static/data/all_laps.parquet")
+
     df_lap_data = df_lap_data.filter(
-        c("year") == year, c("round_number") == round_number
+        (pl.col("year") == year) & (pl.col("round_number") == round_number)
     )
 
     df_race_data = df_race_data.filter(
-        pl.col("year") == year, pl.col("round_number") == round_number
+        (pl.col("year") == year) & (pl.col("round_number") == round_number)
     )
 
     df_driver_data = df_driver_data.filter(
-        pl.col("year") == year, pl.col("round_number") == round_number
+        (pl.col("year") == year) & (pl.col("round_number") == round_number)
     )
 
     df_driver_data = df_driver_data.select(
@@ -95,8 +95,6 @@ def update_race_data(year, round_number):
         how="left",
     )
 
-    df_race_data = df_race_data
-
     # Convert columns to string for grouping
     df_race_data = df_race_data.with_columns(
         [
@@ -109,6 +107,7 @@ def update_race_data(year, round_number):
     # Group by the required columns
     grouped = df_race_data.group_by(["driver_number", "year", "round_number"]).agg(
         [
+            pl.col("Abbreviation").first().alias("abbreviation"),
             pl.col("TeamName").first().alias("team_name"),
             pl.col("TeamColor").first().alias("team_color"),
             pl.struct(["x", "y"]).alias("positions"),
@@ -124,7 +123,6 @@ def update_race_data(year, round_number):
     drivers_json = json.dumps(drivers)
 
     return drivers_json
-
 
 @app.route("/get_lap_data/<int:year>/<int:round_number>/<int:lap>")
 def get_lap_data(year, round_number, lap):
