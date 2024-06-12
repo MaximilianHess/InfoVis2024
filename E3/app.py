@@ -234,8 +234,8 @@ def get_tyre_data(year, round_number, lap):
 
     return jsonify({"data": output_dict})
 
-if __name__ == "__main__":
-    app.run(debug=True)
+#if __name__ == "__main__":
+#    app.run(debug=True)
 
 # main page
 @app.route("/")
@@ -245,9 +245,9 @@ def index():
     circuit_data = dev_circuit_data()
     
     return render_template("index.html",
-                           globe_data=globe_data,
-                           circuit_geo_data=circuit_geo_data,
-                           circuit_data=dev_circuit_data())
+                        globe_data=globe_data,
+                        circuit_geo_data=circuit_geo_data,
+                        circuit_data=dev_circuit_data())
 
 # Initiate the server in debug mode
 if __name__ == "__main__":
