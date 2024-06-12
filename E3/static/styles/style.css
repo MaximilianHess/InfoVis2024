@@ -98,10 +98,11 @@ body {
 }
 
 #slider {
-  width: 130px; 
-  height: 100px; 
+  width: 130px;
+  height: 100px; /* Height of the slider track */
   margin-right: 0px; 
-  transform: rotate(90deg); 
+  transform: rotate(90deg);
+  outline: none; /* Remove outline */
 }
 
 #years-labels {

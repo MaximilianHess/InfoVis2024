@@ -157,7 +157,6 @@ def get_lap_data(year, round_number,lap):
     pl.col('LapNumber').alias('lap'),
     pl.col('Position').alias('pos'),
     pl.col("TeamColor").first()
-
     ])
 
     output_dict = {}
@@ -180,7 +179,7 @@ def get_lap_data(year, round_number,lap):
         output_dict[driver] = {
             "values": [{"lap": x, "pos": y} for x, y in zip(lap_numbers, positions)],
             "color": f"#{team_color}"
-    }
+        }
 
     return jsonify(output_dict)
 

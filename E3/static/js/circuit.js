@@ -1,5 +1,4 @@
 export { init_circuit, update_race_data_and_race, set_circuit_from_globe}
-import { pass_year, pass_circuit } from "./globe.js";
 import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot } from "./positions.js";
 
 // Global Variables

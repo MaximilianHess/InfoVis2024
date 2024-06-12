@@ -79,7 +79,6 @@ function update_driver_pos_first_lap(year, round_number) {
     d3.json(`/get_lap_data/${year}/${round_number}/${1}`)
         .then(function (lap_data) {
 
-
             update_driver_pos_chart(year, round_number, 1)
 
 
@@ -169,8 +168,6 @@ function update_driver_pos_chart(year, round_number, lap) {
   
 
 
-
-
             const lap_data_dots = lap_data.map(d => {
                 return {
                     color: d.color,
@@ -185,8 +182,8 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .style("fill", d => d.color)
         })
-
 }
+
 
 function adjust_x_axis_pos_plot(total_laps) {
     x.domain([0, total_laps])
