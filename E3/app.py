@@ -154,9 +154,9 @@ def get_lap_data(year, round_number, lap):
         pl.col('LapNumber').alias('lap'),
         pl.col('Position').alias('pos'),
         pl.col("TeamColor").first(),
-        pl.col("TeamName").first(),
-        pl.col("FirstName").first(),
-        pl.col("LastName").first()
+        pl.col("TeamName").first().alias('team_name'),
+        pl.col("FirstName").first().alias('first_name'),
+        pl.col("LastName").first().alias('last_name')
     ])
 
     output_dict = {}

@@ -28,8 +28,14 @@ function init_pos_plot() {
     render_pos_chart()
 }
 
-function render_pos_chart() {
 
+// driver tooltip
+const driver_tooltip = d3.select("body")
+.append("div")
+.attr("id", "driver_tooltip")
+.attr("class", "tooltip");
+
+function render_pos_chart() {
 
     // append the svg object to the body of the page
     svg = d3.select("#pos_plot")
@@ -81,7 +87,6 @@ function update_driver_pos_first_lap(year, round_number) {
 
             update_driver_pos_chart(year, round_number, 1)
 
-
             lap_data = Object.values(lap_data)
 
             svg.selectAll(".line-border")
@@ -120,7 +125,10 @@ function update_driver_pos_first_lap(year, round_number) {
                 return {
                     color: d.color,
                     lap: d.values[d.values.length - 1].lap,
-                    pos: d.values[d.values.length - 1].pos
+                    pos: d.values[d.values.length - 1].pos,
+                    first_name: d.first_name,
+                    last_name: d.last_name,
+                    team_name: d.team_name
                 };
             });
 
@@ -138,8 +146,6 @@ function update_driver_pos_first_lap(year, round_number) {
         })
 
 }
-
-
 
 
 function update_driver_pos_chart(year, round_number, lap) {
@@ -167,20 +173,40 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("stroke", d => d.color) // Set stroke color
   
 
-
             const lap_data_dots = lap_data.map(d => {
                 return {
                     color: d.color,
                     lap: d.values[d.values.length - 1].lap,
-                    pos: d.values[d.values.length - 1].pos
+                    pos: d.values[d.values.length - 1].pos,
+                    first_name: d.first_name,
+                    last_name: d.last_name,
+                    team_name: d.team_name
                 };
             });
+
 
             svg.selectAll(".dots_line_plot")
                 .data(lap_data_dots)
                 .attr("cx", function (d) { return x(d.lap); }) // Set the x position of the cycle marker
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .style("fill", d => d.color)
+                .on("mouseover", function(event, d) {
+                    const [mouseX, mouseY] = d3.pointer(event); // Get mouse coordinates
+                    const tooltipWidth = driver_tooltip.node().offsetWidth;
+                    const tooltipHeight = driver_tooltip.node().offsetHeight;
+                    const dotRadius = 5;
+                    
+                    // Position tooltip above the dot
+                    driver_tooltip
+                        .style("left", `${mouseX - tooltipWidth / 2}px`)
+                        .style("top", `${mouseY - tooltipHeight - dotRadius - 5}px`)
+                        .style("display", "block")
+                        .html(`<span class="tooltip-bold">${d.first_name}, ${d.last_name}</span><br>
+                              <span class="tooltip-regular">${d.team_name}</span>`);
+                })
+                .on("mouseout", function() {
+                    driver_tooltip.style("display", "none");
+                });
         })
 }
 
