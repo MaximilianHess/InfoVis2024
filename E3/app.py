@@ -127,9 +127,7 @@ def update_race_data(year, round_number):
 
 
 @app.route("/get_lap_data/<int:year>/<int:round_number>/<int:lap>")
-def get_lap_data(year, round_number,lap):
-
-    df_lap_data = pl.scan_parquet("./static/data/all_laps.parquet")
+def get_lap_data(year, round_number, lap):
     df_lap_data = pl.scan_parquet("./static/data/all_laps.parquet")
     df_driver_data = pl.scan_parquet("./static/data/all_driver_data.parquet")
 
@@ -147,16 +145,20 @@ def get_lap_data(year, round_number,lap):
         ]
     )
 
-    df_lap_data = df_lap_data.filter(c("year")==year, c("round_number")==round_number, c("LapNumber") <= lap)
+    df_lap_data = df_lap_data.filter((pl.col("year") == year) & (pl.col("round_number") == round_number) & (pl.col("LapNumber") <= lap))
 
-    df_driver_data = df_driver_data.select(["round_number","year","DriverNumber","TeamColor"])
+    df_driver_data = df_driver_data.select(["round_number", "year", "DriverNumber", "TeamColor", "TeamName", "Abbreviation", "FirstName", "LastName"])
 
-    df_lap_data = df_lap_data.join(df_driver_data, on=["round_number","year","DriverNumber"]).drop_nulls(subset="Position")
+    df_lap_data = df_lap_data.join(df_driver_data, on=["round_number", "year", "DriverNumber"]).drop_nulls(subset="Position")
 
-    grouped_lap_data = df_lap_data.group_by('DriverNumber').agg([
-    pl.col('LapNumber').alias('lap'),
-    pl.col('Position').alias('pos'),
-    pl.col("TeamColor").first()
+    grouped_lap_data = df_lap_data.groupby('DriverNumber').agg([
+        pl.col('Driver').first().alias('Driver'),
+        pl.col('LapNumber').alias('lap'),
+        pl.col('Position').alias('pos'),
+        pl.col("TeamColor").first(),
+        pl.col("TeamName").first(),
+        pl.col("FirstName").first(),
+        pl.col("LastName").first()
     ])
 
     output_dict = {}
@@ -165,9 +167,9 @@ def get_lap_data(year, round_number,lap):
 
     # Create the output dictionary from the grouped_lap_data DataFrame
     for row in grouped_lap_data.collect().rows():
-        driver, lap_numbers, positions,team_color = row
-    # Get the last lap number and position for padding
+        driver_number, driver_name, lap_numbers, positions, team_color, team_name, first_name, last_name = row
 
+        # Get the last lap number and position for padding
         last_position = positions[-1]
         last_lap = lap_numbers[-1]
 
@@ -175,8 +177,11 @@ def get_lap_data(year, round_number,lap):
         lap_numbers.extend([last_lap] * (max_len - len(lap_numbers)))
         positions.extend([last_position] * (max_len - len(positions)))
 
-        
-        output_dict[driver] = {
+        output_dict[driver_number] = {
+            "driver": driver_name,
+            "first_name": first_name,
+            "last_name": last_name,
+            "team_name": team_name,
             "values": [{"lap": x, "pos": y} for x, y in zip(lap_numbers, positions)],
             "color": f"#{team_color}"
         }

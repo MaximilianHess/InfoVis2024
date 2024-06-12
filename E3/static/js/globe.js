@@ -164,6 +164,7 @@ function render_globe(globe_data, circuit_geo_data) {
             .on("mousedown", function(event, d) {
                 setTimeout(function() {
                     set_circuit_from_globe(selectedYear_global, d.round_number);
+                    showRacePage(); // Switch to the race page
                 }, 250); 
             });
 
@@ -203,8 +204,10 @@ function render_globe(globe_data, circuit_geo_data) {
                 updateData(selectedYear); // update data based on selected year
                 updateLabels(selectedYearIndex); 
                 pass_year(selectedYear);  // write global var
+                rotationAllowed = true; // restart the globe rotation when another year is chosen
             });
     
+            
         // Append the year labels
         const labelsContainer = sliderContainer.select("#years-labels");
     
@@ -306,7 +309,10 @@ function render_globe(globe_data, circuit_geo_data) {
     }
     
     // Start the world tour
-    worldTour(circuit_geo_data, projection);}
+    worldTour(circuit_geo_data, projection);
+}
+
+
 
 // template: https://observablehq.com/@d3/world-tour?intent=fork
 class Versor {
@@ -362,5 +368,26 @@ class Versor {
         x[3] = d1 * c + d2 * s;
         return x;
       };
+    }}
+
+// TRANSITION FROM GLOBE TO CIRCUIT AND BACK
+function showRacePage() {
+    document.getElementById('start_page').style.display = 'none';
+    document.getElementById('race_page').style.display = 'flex';
     }
-  }
+    
+    // Function to switch to the start page
+    function showStartPage() {
+    document.getElementById('race_page').style.display = 'none';
+    document.getElementById('start_page').style.display = 'flex';
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+    // Initially display the start page and hide the race page
+    document.getElementById('start_page').style.display = 'flex';
+    document.getElementById('race_page').style.display = 'none';
+    
+    // Add event listeners to the buttons
+    document.getElementById('switch_to_race_page').addEventListener('click', showRacePage);
+    document.getElementById('switch_to_start_page').addEventListener('click', showStartPage);
+    });

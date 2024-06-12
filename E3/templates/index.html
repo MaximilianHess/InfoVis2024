@@ -89,30 +89,6 @@
     init_tyre_plot()
   </script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Initially display the start page and hide the race page
-      document.getElementById('start_page').style.display = 'flex';
-      document.getElementById('race_page').style.display = 'none';
-
-      // Function to switch to the race page
-      function showRacePage() {
-        document.getElementById('start_page').style.display = 'none';
-        document.getElementById('race_page').style.display = 'flex';
-      }
-
-      // Function to switch to the start page
-      function showStartPage() {
-        document.getElementById('race_page').style.display = 'none';
-        document.getElementById('start_page').style.display = 'flex';
-      }
-
-      // Add event listeners to the buttons
-      document.getElementById('switch_to_race_page').addEventListener('click', showRacePage);
-      document.getElementById('switch_to_start_page').addEventListener('click', showStartPage);
-    });
-  </script>
-
 </body>
 
 </html>
