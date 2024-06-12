@@ -10,26 +10,26 @@ var selected_round = 1
 var selected_year = 2020
 var max_width_or_height = 800
 var animation_speed = 20
-var temp_global_circuit_data
+var global_circuit_data
 var current_lap = 1
 var current_leader = 1
 
 
 function init_circuit(circuit_data) {
+    global_circuit_data = circuit_data
     update_race_data_and_race(selected_year, selected_round)
     update_driver_pos_first_lap(selected_year, selected_round)
     calculate_width_and_height(circuit_data)
     render_select(circuit_data)
     render_circuit(circuit_data)
     set_circuit(circuit_data)
-    temp_global_circuit_data = circuit_data
 }
 
 var margin = { top: 50, right: 50, bottom: 50, left: 50 }
 
-function render_circuit(circuit_data) {
+function render_circuit() {
 
-    circuit_data = circuit_data.filter(function (d) {
+    let circuit_data = global_circuit_data.filter(function (d) {
         return (d["round_number"] == selected_round && d["year"] == selected_year)
     })
 
@@ -141,16 +141,16 @@ function animate_race(index) {
 
 }
 
-function set_circuit(circuit_data) {
+function set_circuit() {
     d3.select("#selectCircuit").on("change", function (d) {
         selected_round = d3.select(this).property("value")
-        update_circuit(circuit_data)
+        update_circuit()
         update_race_data_and_race(selected_year, selected_round)
     })
 
     d3.select("#select_year").on("change", function (d) {
         selected_year = d3.select(this).property("value")
-        update_circuit(circuit_data)
+        update_circuit()
         update_race_data_and_race(selected_year, selected_round)
     })
 }
@@ -160,21 +160,21 @@ function set_circuit(circuit_data) {
     selected_year = pass_year(year);
     //selected_round = circuit
     //selected_year = year
-    update_circuit(temp_global_circuit_data)
+    update_circuit(global_circuit_data)
 }*/
 
 
-function update_circuit(circuit_data) {
-    var filtered_circuit_data = circuit_data.filter(function (d) {
+function update_circuit() {
+    var filtered_circuit_data = global_circuit_data.filter(function (d) {
         return (d["round_number"] == selected_round && d["year"] == selected_year)
     })
-    calculate_width_and_height(circuit_data)
+    calculate_width_and_height(global_circuit_data)
     update_driver_pos_first_lap(selected_year, selected_round)
 
     global_index = 0
 
     d3.select('#circuit').selectAll("*").remove();
-    render_circuit(circuit_data)
+    render_circuit()
 
     x_scale.domain(d3.extent(filtered_circuit_data, function (d) { return d["x"] }))
     y_scale.domain(d3.extent(filtered_circuit_data, function (d) { return d["y"] }))

@@ -56,6 +56,7 @@
   <script type="module" src="../static/js/globe.js"></script>
   <script type="module" src="../static/js/circuit.js"></script>
   <script type="module" src="../static/js/positions.js"></script>
+  <script type="module" src="../static/js/tyres.js"></script>
 
   <script type="module">
     import { init_globe } from "../static/js/globe.js";
@@ -82,8 +83,10 @@
   <script type="module">
     import { init_circuit } from "../static/js/circuit.js";
     import { init_pos_plot } from "../static/js/positions.js";
+    import {init_tyre_plot} from "../static/js/tyres.js"
     init_pos_plot();
     init_circuit({{ circuit_data | safe }});
+    init_tyre_plot()
   </script>
 
   <script>

@@ -184,6 +184,59 @@ def get_lap_data(year, round_number,lap):
 
     return jsonify(output_dict)
 
+@app.route("/get_tyre_data/<int:year>/<int:round_number>/<int:lap>")
+def get_tyre_data(year, round_number, lap):
+
+    df_lap_data = pl.scan_parquet("./static/data/all_laps.parquet")
+    df_driver_data = pl.scan_parquet("./static/data/all_driver_data.parquet")
+
+    df_lap_data = df_lap_data.select(
+        [
+            "round_number",
+            "year",
+            "Driver",
+            "DriverNumber",
+            "LapTime",
+            "LapNumber",
+            "IsPersonalBest",
+            "Compound",
+            "Position",
+        ]
+    )
+
+    df_lap_data = df_lap_data.filter((pl.col("year") == year) & (pl.col("round_number") == round_number) & (pl.col("LapNumber") <= lap))
+
+    df_driver_data = df_driver_data.select(["round_number", "year", "DriverNumber", "TeamColor"])
+
+    df_lap_data = df_lap_data.join(df_driver_data, on=["round_number", "year", "DriverNumber"]).drop_nulls(subset="Position")
+
+    grouped_lap_data = df_lap_data.group_by('DriverNumber').agg([
+        pl.col('LapNumber').alias('lap'),
+        pl.col("Compound").alias('compound'),
+    ])
+
+    output_dict = {}
+
+    max_len = lap
+
+    for row in grouped_lap_data.collect().rows():
+        driver, lap_numbers, compounds = row
+        last_lap = lap_numbers[-1]
+        last_compound = compounds[-1]
+
+        lap_numbers.extend([last_lap] * (max_len - len(lap_numbers)))
+        compounds.extend([last_compound] * (max_len - len(compounds)))
+
+        output_dict[driver] = {
+            "laps": lap_numbers,
+            "compounds": compounds,
+        }
+
+    return jsonify({"data": output_dict})
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 # main page
 @app.route("/")
 def index():
