@@ -143,7 +143,8 @@ function update_driver_pos_first_lap(year, round_number) {
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
-                .style("stroke", "black");
+                .style("stroke", "black")
+                .style("stroke-width", 0.1);
         })
 
 }
@@ -217,9 +218,7 @@ function update_driver_pos_chart(year, round_number, lap) {
             .attr("class", "dot_labels")
             .attr("x", function(d) { return x(d.lap) + 8; }) // Position to the right of the dot
             .attr("y", function(d) { return y(d.pos) + 4; }) // Vertically aligned with the dot
-            .text(function(d) { return `${d.abbr}`; }) // Text content of the label
-            .style("font-size", "12px")
-            .style("fill", "black");
+            .text(function(d) { return `${d.abbr}`; }); // Text content of the labels
         })
 }
 

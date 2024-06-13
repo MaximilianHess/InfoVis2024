@@ -7,12 +7,7 @@ let rotationAllowed = true;
 
 // global variables for connection
 window.selectedYear_global = 2020;
-
-// setter function for year
-function pass_year(year) {
-    window.selectedYear_global = year;
-    console.log(selectedYear_global);
-}
+window.selectedCircuit_global = "Austrian Grand Prix";
 
 
 // init function that is called by the backend at the start 
@@ -163,6 +158,7 @@ function render_globe(globe_data, circuit_geo_data) {
             })
             .on("mousedown", function(event, d) {
                 setTimeout(function() {
+                    window.selectedCircuit_global = d.gp_name;
                     set_circuit_from_globe(selectedYear_global, d.round_number);
                     showRacePage(); // Switch to the race page
                 }, 250); 
@@ -203,7 +199,7 @@ function render_globe(globe_data, circuit_geo_data) {
                 const selectedYear = years[selectedYearIndex];
                 updateData(selectedYear); // update data based on selected year
                 updateLabels(selectedYearIndex); 
-                pass_year(selectedYear);  // write global var
+                window.selectedYear_global = selectedYear;  // write global var
                 rotationAllowed = true; // restart the globe rotation when another year is chosen
             });
     

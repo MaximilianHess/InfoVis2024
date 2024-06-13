@@ -49,37 +49,44 @@ function render_circuit() {
 
 
     // append the x axis
-    svg.append("g")
+    /*svg.append("g")
         .attr("class", "xAxis")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x_scale)
             .tickSizeOuter(0)
             .tickFormat(d3.format("d")) // format the years stores as integers to show like "2,000" -> "2000"
         )
-
+*/
 
     y_scale = d3.scaleLinear()
         .domain(d3.extent(circuit_data, function (d) { return d["y"] }))
         .range([height, 0])
 
     // append y axis
-    svg.append("g")
+    /*svg.append("g")
         .attr("class", "yAxis")
         .call(d3.axisLeft(y_scale)
-            .tickSizeOuter(0))
-
+            .tickSizeOuter(0))*/
 
     line_circuit = svg
         .append("g")
         .append("path")
         .datum(circuit_data)
-        .attr("stroke", "black")
-        .style("stroke-width", 4)
+        .attr("stroke", "#636363")
+        .style("stroke-width", 6)
         .style("fill", "none")
         .attr("d", d3.line()
             .x(function (d) { return x_scale(d["x"]) })
             .y(function (d) { return y_scale(d["y"]) })
         )
+
+    // append the title
+    svg.append("text")
+    .attr("x", width / 2) // centered horizontally
+    .attr("y", -20) 
+    .style("text-anchor", "middle")
+    .style("font-size", "16px")
+    .text(window.selectedCircuit_global + " " + window.selectedYear_global);
 
     // TODO: This button has to be redone for the final design
     d3.select("#start_race").on("click", start_race)
@@ -180,13 +187,13 @@ function update_circuit() {
     x_scale.domain(d3.extent(filtered_circuit_data, function (d) { return d["x"] }))
     y_scale.domain(d3.extent(filtered_circuit_data, function (d) { return d["y"] }))
 
-    svg.select(".yAxis")
+    /*svg.select(".yAxis")
         .call(d3.axisLeft(y_scale)
             .tickSizeOuter(0))
 
     svg.select(".xAxis")
         .call(d3.axisBottom(x_scale)
-            .tickSizeOuter(0))
+            .tickSizeOuter(0))*/
 
 
     line_circuit
@@ -226,7 +233,7 @@ function update_race(race_data) {
     .append("circle")
     .attr("cx", d => x_scale(d.positions[0].x))
     .attr("cy", d => y_scale(d.positions[0].y))
-    .attr("r", 5)
+    .attr("r", 6)
     .style("fill", d => `#${d.team_color}`)
     .on("mouseover", function(event, d) {
         // Calculate the tooltip position
