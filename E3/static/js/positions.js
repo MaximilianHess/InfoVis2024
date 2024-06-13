@@ -1,24 +1,10 @@
 export { update_driver_pos_chart, init_pos_plot, update_driver_pos_first_lap, adjust_x_axis_pos_plot }
 
-
-var global_lineplot_data
-var lines
-var line
 var y
 var x
-var selectedTeam = null
-var concatenated_driver_pos
-var selectedMetric = "--"
 var svg
+var line
 
-
-let positions = [];
-let laps = [];
-let years = [];
-let roundNumbers = [];
-let drivers = [];
-let teamColors = [];
-let teamNames = [];
 
 var margin = { top: 100, right: 50, bottom: 50, left: 50 },
     width = 1000 - margin.left - margin.right,
@@ -55,7 +41,7 @@ function render_pos_chart() {
 
     // append the x axis
     svg.append("g")
-        .attr("class", "xAxis")
+        .attr("class", "x-axis-pos")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x)
             .tickSizeOuter(0)
@@ -64,14 +50,26 @@ function render_pos_chart() {
 
     // scale y axis
     y = d3.scaleLinear()
-        .domain([21, 1])
+        .domain([20.9, 1])
         .range([height, 0])
 
-    // append y axis
+    // Append y axis
     svg.append("g")
-        .attr("class", "yAxis")
+        .attr("class", "y-axis-pos")
         .call(d3.axisLeft(y)
-            .tickSizeOuter(0))
+            //.tickSize(-width)  // Makes ticks extend across the entire width of the chart
+            .tickSizeOuter(0)  // Hides the outer tick on the axis
+            .ticks(19)
+            .tickPadding(10))  // Adjust padding between ticks and the axis
+        .selectAll(".tick line")
+        .classed("tick-line", true);  // Add class to tick lines
+
+    svg.selectAll(".y-axis-pos .tick text")
+        .attr("class", "ticks")
+
+    svg.selectAll(".x-axis-pos .tick text")
+        .attr("class", "ticks")
+
 
     line = d3.line()
         .x(d => x(d.lap))
@@ -117,7 +115,7 @@ function update_driver_pos_first_lap(year, round_number) {
                 })
                 .attr("stroke", d => d.color) // Set stroke color
                 .attr("stroke-width", 4)
-                .style("fill", "none");
+                .style("fill", "none")
 
 
 
@@ -144,7 +142,20 @@ function update_driver_pos_first_lap(year, round_number) {
                 .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
                 .style("stroke", "black")
-                .style("stroke-width", 0.1);
+                .style("stroke-width", 0.1)
+                .on("mouseover", function (_, data) { // to do when the mouse hovers over
+                    svg.selectAll("g.tick")
+                        .filter(function (d) { return d == data["pos"] })
+                        .style("font-weight", "bolder")
+                        .style("font-size", "110%")
+                        .classed("bold_tick", true)
+                })
+                .on("mouseout", function () {
+                    d3.selectAll("g.tick.bold_tick")
+                        .style("font-weight", "normal")
+                        .style("font-size", "100%")
+                        .classed("bold_tick", false)
+                })
         })
 
 }
@@ -172,7 +183,7 @@ function update_driver_pos_chart(year, round_number, lap) {
                         .x(function (d) { return x(d.lap); }) // Access the lap value
                         .y(function (d) { return y(d.pos); })(d.values); // Access the position value
                 })
-                .attr("stroke", d => d.color) // Set stroke color
+                .attr("stroke", d => d.color)
 
 
             const lap_data_dots = lap_data.map(d => {
@@ -183,7 +194,7 @@ function update_driver_pos_chart(year, round_number, lap) {
                     first_name: d.first_name,
                     last_name: d.last_name,
                     team_name: d.team_name,
-                    abbr:d.abbr
+                    abbr: d.abbr
                 };
             });
 
@@ -198,7 +209,13 @@ function update_driver_pos_chart(year, round_number, lap) {
                     const tooltipWidth = driver_tooltip.node().offsetWidth;
                     const tooltipHeight = driver_tooltip.node().offsetHeight;
                     const dotRadius = 5;
-                    
+
+
+                    svg.selectAll("g.tick")
+                    .filter(function (data) { return data == d["pos"] })
+                    .style("font-weight", "bolder")
+                    .style("font-size", "110%")
+                    .classed("bold_tick", true)
                     // Position tooltip above the dot
                     driver_tooltip
                         .style("left", `${x + 55}px`)
@@ -209,8 +226,11 @@ function update_driver_pos_chart(year, round_number, lap) {
                 })
                 .on("mouseout", function () {
                     driver_tooltip.style("display", "none");
+                    d3.selectAll("g.tick.bold_tick")
+                    .style("font-weight", "normal")
+                    .style("font-size", "100%")
+                    .classed("bold_tick", false)
                 });
-
 
             svg.selectAll(".dot_labels")
             .data(lap_data_dots)
@@ -226,10 +246,17 @@ function update_driver_pos_chart(year, round_number, lap) {
 function adjust_x_axis_pos_plot(total_laps) {
     x.domain([0, total_laps])
 
-    svg.select(".xAxis")
+    svg.select(".x-axis-pos")
         .transition()
         .duration(300)
         .call(d3.axisBottom(x)
             .tickSizeOuter(0)
             .tickFormat(d3.format("d")))
+
+
+    svg.selectAll("g.tick text")
+        .attr("class", "ticks")
+
+    svg.selectAll("g.tick text")
+        .attr("class", "ticks")
 }
