@@ -5,7 +5,7 @@ import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot }
 // Global Variables
 var driver_dots, x_scale, y_scale, race_interval, line_circuit, svg, width, height, race_data, total_laps, last_index
 var global_index = 0
-var race_started = false
+var race_restart = false
 var selected_round = 1
 var selected_year = 2020
 var max_width_or_height = 800
@@ -97,26 +97,28 @@ function render_circuit() {
 
 
 function start_race() {
-
     stop_race()
-    if (!race_started) {
-        init_lap_counter_and_slider(race_data)
-        driver_dots
-            .attr("cx", d => x_scale(d.positions[0].x))
-            .attr("cy", d => y_scale(d.positions[0].y))
 
-        animate_race(0)
-        race_started = true
-    }
+    init_lap_counter_and_slider(race_data)
+    driver_dots
+        .attr("cx", d => x_scale(d.positions[0].x))
+        .attr("cy", d => y_scale(d.positions[0].y))
+
+    animate_race(0)
+
+    const lap_slider = document.getElementById("lapSlider");
+    lap_slider.value = 1    
+
+    const speed_slider = document.getElementById("speedSlider")
+    speed_slider.value = -270
+    animation_speed = -270
 }
 
 function stop_race() {
     clearInterval(race_interval)
-    race_started = false
 }
 
 function resume_race() {
-    race_started = true
     stop_race()
     animate_race(global_index)
 }
