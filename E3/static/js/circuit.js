@@ -235,26 +235,27 @@ function update_race(race_data) {
     stop_race();
     svg.selectAll("circle").remove();
 
-    driver_dots = svg.selectAll("circle")
-        .data(race_data)
-        .enter()
-        .append("circle")
-        .attr("cx", d => x_scale(d.positions[0].x))
-        .attr("cy", d => y_scale(d.positions[0].y))
-        .attr("r", 6)
-        .style("fill", d => `#${d.team_color}`)
-        .on("mouseover", function (event, d) {
-            // Calculate the tooltip position
-            const [x, y] = d3.pointer(event);
-            driver_tooltip
-                .style("left", `${x + 30}px`)
-                .style("top", `${y + 10}px`)
-                .style("display", "block")
-                .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
-        })
-        .on("mouseout", function () {
-            driver_tooltip.style("display", "none");
-        });
+  driver_dots = svg.selectAll("circle")
+    .data(race_data)
+    .enter()
+    .append("circle")
+    .attr("stroke", "#636363")
+    .attr("cx", d => x_scale(d.positions[0].x))
+    .attr("cy", d => y_scale(d.positions[0].y))
+    .attr("r", 6)
+    .style("fill", d => `#${d.team_color}`)
+    .on("mouseover", function(event, d) {
+        // Calculate the tooltip position
+        const [x, y] = d3.pointer(event);
+        driver_tooltip
+            .style("left", `${x + 30}px`)
+            .style("top", `${y + 10}px`)  
+            .style("display", "block")
+            .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
+    })
+    .on("mouseout", function() {
+        driver_tooltip.style("display", "none");
+    });
 }
 
 

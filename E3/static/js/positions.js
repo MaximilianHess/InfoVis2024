@@ -51,7 +51,6 @@ function render_pos_chart() {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x)
             .tickSizeOuter(0)
-            .tickFormat(d3.format("d")) // format the years stores as integers to show like "2,000" -> "2000"
         )
 
     // scale y axis
@@ -63,7 +62,6 @@ function render_pos_chart() {
     svg.append("g")
         .attr("class", "y-axis-pos")
         .call(d3.axisLeft(y)
-            //.tickSize(-width)  // Makes ticks extend across the entire width of the chart
             .tickSizeOuter(0)  // Hides the outer tick on the axis
             .ticks(19)
             .tickPadding(10))  // Adjust padding between ticks and the axis
@@ -80,9 +78,6 @@ function render_pos_chart() {
     line = d3.line()
         .x(d => x(d.lap))
         .y(d => y(d.pos));
-
-
-
 }
 
 function update_driver_pos_first_lap(year, round_number) {
@@ -247,7 +242,6 @@ function update_driver_pos_chart(year, round_number, lap) {
             .text(function(d) { return `${d.abbr}`; }); // Text content of the labels
         })
 }
-
 
 function adjust_x_axis_pos_plot(total_laps) {
     x.domain([0, total_laps])
