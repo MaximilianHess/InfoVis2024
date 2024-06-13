@@ -34,16 +34,31 @@ function render_pos_chart() {
     
     svg.append("text")
             .attr("x", (width + margin.left + margin.right) / 2)
-            .attr("y", -30) // Adjust vertically as needed
+            .attr("y", -30) 
             .style("text-anchor", "middle")
             .style("font-size", "16px")
             .text("Drivers' positions per lap");
+    
+    // x axis label
+    svg.append("text")
+            .attr("x", (width + margin.left + margin.right) / 2)
+            .attr("y", + height + 40) 
+            .style("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Lap number");
 
-    // scale the x axis between the min and max year available in the data
+    // y axis label
+    svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -(height / 2)) 
+            .attr("y", -margin.left + 10) 
+            .style("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Position");
+
     x = d3.scaleLinear()
         .domain([0, 100])
         .range([0, width])
-
 
     // append the x axis
     svg.append("g")
@@ -206,17 +221,13 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .style("fill", d => d.color)
                 .on("mouseover", function (event, d) {
-                    const [mouseX, mouseY] = d3.pointer(event); // Get mouse coordinates
-                    const tooltipWidth = driver_tooltip.node().offsetWidth;
-                    const tooltipHeight = driver_tooltip.node().offsetHeight;
-                    const dotRadius = 5;
-
-
+                    
                     svg.selectAll("g.tick")
                     .filter(function (data) { return data == d["pos"] })
                     .style("font-weight", "bolder")
-                    .style("font-size", "110%")
+                    .style("font-size", "120%")
                     .classed("bold_tick", true)
+
                     // Position tooltip above the dot
                     driver_tooltip
                         .style("left", `${x + 55}px`)
@@ -235,11 +246,11 @@ function update_driver_pos_chart(year, round_number, lap) {
 
             svg.selectAll(".dot_labels")
             .data(lap_data_dots)
-            .join("text") // Use join to handle the enter, update, and exit selections
+            .join("text") 
             .attr("class", "dot_labels")
-            .attr("x", function(d) { return x(d.lap) + 8; }) // Position to the right of the dot
-            .attr("y", function(d) { return y(d.pos) + 4; }) // Vertically aligned with the dot
-            .text(function(d) { return `${d.abbr}`; }); // Text content of the labels
+            .attr("x", function(d) { return x(d.lap) + 8; }) 
+            .attr("y", function(d) { return y(d.pos) + 4; }) 
+            .text(function(d) { return `${d.abbr}`; }); 
         })
 }
 
