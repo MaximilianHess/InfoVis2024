@@ -31,9 +31,9 @@ function init_pos_plot() {
 
 // driver tooltip
 const driver_tooltip = d3.select("body")
-.append("div")
-.attr("id", "driver_tooltip")
-.attr("class", "tooltip");
+    .append("div")
+    .attr("id", "driver_tooltip")
+    .attr("class", "tooltip");
 
 function render_pos_chart() {
 
@@ -64,14 +64,14 @@ function render_pos_chart() {
 
     // scale y axis
     y = d3.scaleLinear()
-        .domain([0, 20])
+        .domain([21, 1])
         .range([height, 0])
 
     // append y axis
     svg.append("g")
         .attr("class", "yAxis")
-        .call(d3.axisLeft(y)
-            .tickSizeOuter(0))
+        .call(d3.axisLeft(y))
+            .tickSizeOuter(0)
 
     line = d3.line()
         .x(d => x(d.lap))
@@ -90,19 +90,19 @@ function update_driver_pos_first_lap(year, round_number) {
             lap_data = Object.values(lap_data)
 
             svg.selectAll(".line-border")
-            .data(lap_data)
-            .enter()
-            .append("path")
-            .attr("class", "line-border")
-            .attr("d", function (d) {
-                // Generate the line path string
-                return d3.line()
-                    .x(function (d) { return x(d.lap); }) // Access the lap value
-                    .y(function (d) { return y(d.pos); })(d.values); // Access the position value
-            })
-            .attr("stroke", "black") // Set stroke color
-            .attr("stroke-width", 4.5)
-            .style("fill", "none");
+                .data(lap_data)
+                .enter()
+                .append("path")
+                .attr("class", "line-border")
+                .attr("d", function (d) {
+                    // Generate the line path string
+                    return d3.line()
+                        .x(function (d) { return x(d.lap); }) // Access the lap value
+                        .y(function (d) { return y(d.pos); })(d.values); // Access the position value
+                })
+                .attr("stroke", "black") // Set stroke color
+                .attr("stroke-width", 4.5)
+                .style("fill", "none");
 
             svg.selectAll(".line")
                 .data(lap_data)
@@ -154,13 +154,13 @@ function update_driver_pos_chart(year, round_number, lap) {
             lap_data = Object.values(lap_data)
 
             svg.selectAll(".line-border")
-            .data(lap_data)
-            .attr("d", function (d) {
-                // Generate the line path string
-                return d3.line()
-                    .x(function (d) { return x(d.lap); }) // Access the lap value
-                    .y(function (d) { return y(d.pos); })(d.values); // Access the position value
-            })
+                .data(lap_data)
+                .attr("d", function (d) {
+                    // Generate the line path string
+                    return d3.line()
+                        .x(function (d) { return x(d.lap); }) // Access the lap value
+                        .y(function (d) { return y(d.pos); })(d.values); // Access the position value
+                })
 
             svg.selectAll(".line")
                 .data(lap_data)
@@ -171,7 +171,7 @@ function update_driver_pos_chart(year, round_number, lap) {
                         .y(function (d) { return y(d.pos); })(d.values); // Access the position value
                 })
                 .attr("stroke", d => d.color) // Set stroke color
-  
+
 
             const lap_data_dots = lap_data.map(d => {
                 return {
@@ -190,12 +190,12 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("cx", function (d) { return x(d.lap); }) // Set the x position of the cycle marker
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .style("fill", d => d.color)
-                .on("mouseover", function(event, d) {
+                .on("mouseover", function (event, d) {
                     const [mouseX, mouseY] = d3.pointer(event); // Get mouse coordinates
                     const tooltipWidth = driver_tooltip.node().offsetWidth;
                     const tooltipHeight = driver_tooltip.node().offsetHeight;
                     const dotRadius = 5;
-                    
+
                     // Position tooltip above the dot
                     driver_tooltip
                         .style("left", `${mouseX - tooltipWidth / 2}px`)
@@ -204,7 +204,7 @@ function update_driver_pos_chart(year, round_number, lap) {
                         .html(`<span class="tooltip-bold">${d.first_name}, ${d.last_name}</span><br>
                               <span class="tooltip-regular">${d.team_name}</span>`);
                 })
-                .on("mouseout", function() {
+                .on("mouseout", function () {
                     driver_tooltip.style("display", "none");
                 });
         })

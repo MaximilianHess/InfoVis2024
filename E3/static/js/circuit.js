@@ -91,7 +91,7 @@ function render_circuit() {
 
 function start_race() {
 
-
+    stop_race()
     if (!race_started) {
         init_lap_counter_and_slider(race_data)
         driver_dots
@@ -110,6 +110,7 @@ function stop_race() {
 
 function resume_race() {
     race_started = true
+    stop_race()
     animate_race(global_index)
 }
 

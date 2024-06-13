@@ -86,9 +86,12 @@ function render_tyre_plot() {
 
 
 function update_tyre_plot(year, round_number, lap) {
-    d3.json(`/get_tyre_data/${year}/${round_number}/${lap}`).then(function (data) {
+    d3.json(`/get_tyre_data/${year}/${round_number}/${lap-1}`).then(function (data) {
         // Assuming data is an object with keys as drivers (ALB, BOT, GAS, ...)
         const tyre_data = Object.values(data); // Extract values (lap data) from the object
+
+        console.log(tyre_data);
+
 
         // Select the SVG element
         const svg = d3.select("#tyre_plot").select("svg").select("g");
@@ -101,7 +104,7 @@ function update_tyre_plot(year, round_number, lap) {
             .append("rect")
             .attr("x", function (d) { return x(d["first_lap_stint"]) }) // x axis with the team names
             .attr("y", function (d) { return y(d["Driver"]) })    // y axis with the metrics
-            .attr("width", d => x(d["last_lap_stint"] + 1) - x(d["first_lap_stint"]))
+            .attr("width", d => x(d["last_lap_stint"]+1) - x(d["first_lap_stint"]))
             .attr("height", y.bandwidth())
             .attr("class", "square")
             .attr("rx", 2)
@@ -119,7 +122,6 @@ function update_tyre_plot_first_lap(year, round_number) {
         // Assuming data is an object with keys as drivers (ALB, BOT, GAS, ...)
         const tyre_data = Object.values(data); // Extract values (lap data) from the object
 
-        console.log(tyre_data);
 
         // Extract all drivers from the first entry (assuming all entries have the same drivers)
         var all_drivers = new Set();
@@ -156,7 +158,7 @@ function update_tyre_plot_first_lap(year, round_number) {
             .append("rect")
             .attr("x", function (d) { return x(d["first_lap_stint"]) }) // x axis with the team names
             .attr("y", function (d) { return y(d["Driver"]) })    // y axis with the metrics
-            .attr("width", d => x(d["last_lap_stint"] + 1) - x(d["first_lap_stint"]))
+            .attr("width", d => x(d["last_lap_stint"]+0.5) - x(d["first_lap_stint"]))
             .attr("height", y.bandwidth())
             .attr("class", "square")
             .attr("rx", 2)
