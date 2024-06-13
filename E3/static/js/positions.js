@@ -70,8 +70,8 @@ function render_pos_chart() {
     // append y axis
     svg.append("g")
         .attr("class", "yAxis")
-        .call(d3.axisLeft(y))
-            .tickSizeOuter(0)
+        .call(d3.axisLeft(y)
+            .tickSizeOuter(0))
 
     line = d3.line()
         .x(d => x(d.lap))
