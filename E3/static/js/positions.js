@@ -128,7 +128,8 @@ function update_driver_pos_first_lap(year, round_number) {
                     pos: d.values[d.values.length - 1].pos,
                     first_name: d.first_name,
                     last_name: d.last_name,
-                    team_name: d.team_name
+                    team_name: d.team_name,
+                    abbr: d.abbr
                 };
             });
 
@@ -180,7 +181,8 @@ function update_driver_pos_chart(year, round_number, lap) {
                     pos: d.values[d.values.length - 1].pos,
                     first_name: d.first_name,
                     last_name: d.last_name,
-                    team_name: d.team_name
+                    team_name: d.team_name,
+                    abbr:d.abbr
                 };
             });
 
@@ -195,11 +197,11 @@ function update_driver_pos_chart(year, round_number, lap) {
                     const tooltipWidth = driver_tooltip.node().offsetWidth;
                     const tooltipHeight = driver_tooltip.node().offsetHeight;
                     const dotRadius = 5;
-
+                    
                     // Position tooltip above the dot
                     driver_tooltip
-                        .style("left", `${mouseX - tooltipWidth / 2}px`)
-                        .style("top", `${mouseY - tooltipHeight - dotRadius - 5}px`)
+                        .style("left", `${x + 55}px`)
+                        .style("top", `${y + 630}px`)
                         .style("display", "block")
                         .html(`<span class="tooltip-bold">${d.first_name}, ${d.last_name}</span><br>
                               <span class="tooltip-regular">${d.team_name}</span>`);
@@ -207,6 +209,17 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .on("mouseout", function () {
                     driver_tooltip.style("display", "none");
                 });
+
+
+            svg.selectAll(".dot_labels")
+            .data(lap_data_dots)
+            .join("text") // Use join to handle the enter, update, and exit selections
+            .attr("class", "dot_labels")
+            .attr("x", function(d) { return x(d.lap) + 8; }) // Position to the right of the dot
+            .attr("y", function(d) { return y(d.pos) + 4; }) // Vertically aligned with the dot
+            .text(function(d) { return `${d.abbr}`; }) // Text content of the label
+            .style("font-size", "12px")
+            .style("fill", "black");
         })
 }
 

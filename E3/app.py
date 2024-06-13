@@ -144,9 +144,7 @@ def get_lap_data(year, round_number, lap):
     )
 
     df_lap_data = df_lap_data.filter((pl.col("year") == year) & (pl.col("round_number") == round_number) & (pl.col("LapNumber") <= lap))
-
     df_driver_data = df_driver_data.select(["round_number", "year", "DriverNumber", "TeamColor", "TeamName", "Abbreviation", "FirstName", "LastName"])
-
     df_lap_data = df_lap_data.join(df_driver_data, on=["round_number", "year", "DriverNumber"]).drop_nulls(subset="Position")
 
     grouped_lap_data = df_lap_data.groupby('DriverNumber').agg([
@@ -154,9 +152,10 @@ def get_lap_data(year, round_number, lap):
         pl.col('LapNumber').alias('lap'),
         pl.col('Position').alias('pos'),
         pl.col("TeamColor").first(),
-        pl.col("TeamName").first().alias('team_name'),
-        pl.col("FirstName").first().alias('first_name'),
-        pl.col("LastName").first().alias('last_name')
+        pl.col("TeamName").first(),
+        pl.col("FirstName").first(),
+        pl.col("LastName").first(),
+        pl.col("Abbreviation").first().alias('Abbreviation')
     ])
 
     output_dict = {}
@@ -165,7 +164,7 @@ def get_lap_data(year, round_number, lap):
 
     # Create the output dictionary from the grouped_lap_data DataFrame
     for row in grouped_lap_data.collect().rows():
-        driver_number, driver_name, lap_numbers, positions, team_color, team_name, first_name, last_name = row
+        driver_number, driver_name, lap_numbers, positions, team_color, team_name, first_name, last_name, abbreviation = row
 
         # Get the last lap number and position for padding
         last_position = positions[-1]
@@ -180,6 +179,7 @@ def get_lap_data(year, round_number, lap):
             "first_name": first_name,
             "last_name": last_name,
             "team_name": team_name,
+            "abbr": abbreviation,
             "values": [{"lap": x, "pos": y} for x, y in zip(lap_numbers, positions)],
             "color": f"#{team_color}"
         }
