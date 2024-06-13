@@ -67,6 +67,14 @@ function render_tyre_plot() {
             .tickSizeOuter(0)
         );
 
+
+
+    svg.selectAll(".y-axis .tick text")
+        .attr("class", "ticks")
+
+    svg.selectAll(".x-axis .tick text")
+        .attr("class", "ticks")
+
     /*     const color = get_color_scale()
     
     
@@ -86,7 +94,7 @@ function render_tyre_plot() {
 
 
 function update_tyre_plot(year, round_number, lap) {
-    d3.json(`/get_tyre_data/${year}/${round_number}/${lap-1}`).then(function (data) {
+    d3.json(`/get_tyre_data/${year}/${round_number}/${lap - 1}`).then(function (data) {
         // Assuming data is an object with keys as drivers (ALB, BOT, GAS, ...)
         const tyre_data = Object.values(data); // Extract values (lap data) from the object
 
@@ -104,14 +112,27 @@ function update_tyre_plot(year, round_number, lap) {
             .append("rect")
             .attr("x", function (d) { return x(d["first_lap_stint"]) }) // x axis with the team names
             .attr("y", function (d) { return y(d["Driver"]) })    // y axis with the metrics
-            .attr("width", d => x(d["last_lap_stint"]+1) - x(d["first_lap_stint"]))
+            .attr("width", d => x(d["last_lap_stint"] + 1) - x(d["first_lap_stint"]))
             .attr("height", y.bandwidth())
             .attr("class", "square")
             .attr("rx", 2)
             .attr("ry", 2)
             .style("fill", function (d) { return compound_colors[d["compound"]] }) // fill the rectangles based on the value according to the color scale
             .style("stroke", "black")  // Border color
-            .style("stroke-width", 1);  // Border thickness
+            .style("stroke-width", 1)
+            .on("mouseover", function (_, data) { // to do when the mouse hovers over
+                svg.selectAll("g.tick")
+                    .filter(function (d) { return d == data["Driver"] })
+                    .style("font-weight", "bolder")
+                    .style("font-size", "110%")
+                    .classed("bold_tick", true)
+            })
+            .on("mouseout", function () {
+                d3.selectAll("g.tick.bold_tick")
+                    .style("font-weight", "normal")
+                    .style("font-size", "100%")
+                    .classed("bold_tick", false)
+            })
     });
 }
 
@@ -143,11 +164,20 @@ function update_tyre_plot_first_lap(year, round_number) {
             .range([height, 0])
             .padding(0.2);
 
+
+
         // Update y axis
         svg.select(".y-axis")
             .transition()
             .duration(500)
             .call(d3.axisLeft(y).tickSizeOuter(0))
+
+
+        svg.selectAll(".y-axis .tick text")
+            .attr("class", "ticks")
+
+        svg.selectAll(".x-axis .tick text")
+            .attr("class", "ticks")
 
         svg.selectAll("rect")
             .remove();
@@ -158,14 +188,27 @@ function update_tyre_plot_first_lap(year, round_number) {
             .append("rect")
             .attr("x", function (d) { return x(d["first_lap_stint"]) }) // x axis with the team names
             .attr("y", function (d) { return y(d["Driver"]) })    // y axis with the metrics
-            .attr("width", d => x(d["last_lap_stint"]+0.5) - x(d["first_lap_stint"]))
+            .attr("width", d => x(d["last_lap_stint"] + 0.5) - x(d["first_lap_stint"]))
             .attr("height", y.bandwidth())
             .attr("class", "square")
             .attr("rx", 2)
             .attr("ry", 2)
             .style("fill", function (d) { return compound_colors[d["compound"]] }) // fill the rectangles based on the value according to the color scale
             .style("stroke", "black")  // Border color
-            .style("stroke-width", 1);  // Border thickness
+            .style("stroke-width", 1)
+            .on("mouseover", function (_, data) { // to do when the mouse hovers over
+                svg.selectAll("g.tick")
+                    .filter(function (d) { return d == data["Driver"] })
+                    .style("font-weight", "bolder")
+                    .style("font-size", "110%")
+                    .classed("bold_tick", true)
+            })
+            .on("mouseout", function () {
+                d3.selectAll("g.tick.bold_tick")
+                    .style("font-weight", "normal")
+                    .style("font-size", "100%")
+                    .classed("bold_tick", false)
+            })
     });
 }
 
@@ -176,6 +219,7 @@ function adjust_x_axis_tyre_plot(total_laps) {
     x = d3.scaleLinear()
         .domain([0, total_laps])
         .range([0, width])
+
     svg.select(".x-axis")
         .transition()
         .duration(300)

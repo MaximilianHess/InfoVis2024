@@ -1,6 +1,6 @@
-export { init_circuit, update_race_data_and_race, set_circuit_from_globe}
-import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot} from "./positions.js";
-import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot} from "./tyres.js";
+export { init_circuit, update_race_data_and_race, set_circuit_from_globe }
+import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot } from "./positions.js";
+import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot } from "./tyres.js";
 
 // Global Variables
 var driver_dots, x_scale, y_scale, race_interval, line_circuit, svg, width, height, race_data, total_laps, last_index
@@ -55,7 +55,7 @@ function render_circuit() {
         .call(d3.axisBottom(x_scale)
             .tickSizeOuter(0)
             .tickFormat(d3.format("d")) // format the years stores as integers to show like "2,000" -> "2000"
-        )
+        ).style("display", "none");
 
 
     y_scale = d3.scaleLinear()
@@ -67,6 +67,7 @@ function render_circuit() {
         .attr("class", "yAxis")
         .call(d3.axisLeft(y_scale)
             .tickSizeOuter(0))
+        .style("display", "none")
 
 
     line_circuit = svg
@@ -142,7 +143,7 @@ function animate_race(index) {
 
 }
 
-function set_circuit_from_globe(sel_year,sel_round){
+function set_circuit_from_globe(sel_year, sel_round) {
     selected_round = sel_round
     selected_year = sel_year
     update_circuit()
@@ -169,7 +170,7 @@ function update_circuit() {
     })
     calculate_width_and_height(global_circuit_data)
     update_driver_pos_first_lap(selected_year, selected_round)
-    update_tyre_plot_first_lap(selected_year,selected_round)
+    update_tyre_plot_first_lap(selected_year, selected_round)
 
 
     global_index = 0
@@ -212,34 +213,34 @@ function update_race_data_and_race(selected_year, selected_round) {
 
 // driver tooltip
 const driver_tooltip = d3.select("body")
-  .append("div")
-  .attr("id", "driver_tooltip")
-  .attr("class", "tooltip");
+    .append("div")
+    .attr("id", "driver_tooltip")
+    .attr("class", "tooltip");
 
 function update_race(race_data) {
-  stop_race();
-  svg.selectAll("circle").remove();
+    stop_race();
+    svg.selectAll("circle").remove();
 
-  driver_dots = svg.selectAll("circle")
-    .data(race_data)
-    .enter()
-    .append("circle")
-    .attr("cx", d => x_scale(d.positions[0].x))
-    .attr("cy", d => y_scale(d.positions[0].y))
-    .attr("r", 5)
-    .style("fill", d => `#${d.team_color}`)
-    .on("mouseover", function(event, d) {
-        // Calculate the tooltip position
-        const [x, y] = d3.pointer(event);
-        driver_tooltip
-            .style("left", `${x + 30}px`)
-            .style("top", `${y + 10}px`)  
-            .style("display", "block")
-            .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
-    })
-    .on("mouseout", function() {
-        driver_tooltip.style("display", "none");
-    });
+    driver_dots = svg.selectAll("circle")
+        .data(race_data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => x_scale(d.positions[0].x))
+        .attr("cy", d => y_scale(d.positions[0].y))
+        .attr("r", 5)
+        .style("fill", d => `#${d.team_color}`)
+        .on("mouseover", function (event, d) {
+            // Calculate the tooltip position
+            const [x, y] = d3.pointer(event);
+            driver_tooltip
+                .style("left", `${x + 30}px`)
+                .style("top", `${y + 10}px`)
+                .style("display", "block")
+                .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
+        })
+        .on("mouseout", function () {
+            driver_tooltip.style("display", "none");
+        });
 }
 
 
@@ -278,7 +279,7 @@ function init_lap_counter_and_slider(rd) {
     adjust_x_axis_pos_plot(total_laps)
     adjust_x_axis_tyre_plot(total_laps)
 
-    d3.select("#lap_display").text(`1/${total_laps}`)
+    d3.select("#lap_display").text(`Lap 1/${total_laps}`)
 
     d3.select("#lapSlider")
         .attr("max", total_laps)
@@ -298,9 +299,9 @@ function update_lap(index) {
     function update(driver_index) {
         current_leader = driver_index;
         current_lap = race_data[driver_index]["lap"][index]["LapNumber"];
-        d3.select("#lap_display").text(`${current_lap}/${total_laps}`);
+        d3.select("#lap_display").text(`Lap ${current_lap}/${total_laps}`);
         update_driver_pos_chart(selected_year, selected_round, current_lap);
-        update_tyre_plot(selected_year,selected_round,current_lap)
+        update_tyre_plot(selected_year, selected_round, current_lap)
     }
 
     function get_leading_driver() {
@@ -322,11 +323,11 @@ function update_lap(index) {
 
 function update_animation_lap(new_lap) {
 
-    
+
     race_data.forEach((race, raceIndex) => {
         try {
             const temp_index = race.lap.findIndex(lap => lap.LapNumber == new_lap);
-            if (temp_index != -1 && race.pos[temp_index].Position == 1) {                
+            if (temp_index != -1 && race.pos[temp_index].Position == 1) {
                 global_index = temp_index;
                 current_leader = raceIndex;
             }

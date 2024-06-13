@@ -32,17 +32,17 @@
   <div id="race_page">
     <div id="circuit_container">
       <div id="circuit"></div>
-      <button id="start_race", class="f1-button">(Re-) Start Race</button>
-      <button id="stop_race", class="f1-button">Stop Race</button>
-      <button id="resume_race", class="f1-button">Resume Race</button>
+      <button id="start_race", class="race-button">(Re-) Start Race</button>
+      <button id="stop_race", class="race-button">Stop Race</button>
+      <button id="resume_race", class="race-button">Resume Race</button>
       <div id="lap_display"></div>
-      <div class="slider">
+      <div class="slidecontainer">
         <label for="speedSlider">Race speed: </label>
-        <input type="range" id="speedSlider" min="-270" max="-2" value="-20">
+        <input type="range" id="speedSlider" min="-270" max="-2" value="-270", class="slider">
       </div>
-      <div class="slider">
+      <div class="slidecontainer">
         <label for="lapSlider">Select lap:</label>
-        <input type="range" name="lapSlider" id="lapSlider" min=1 max=30 value=1>
+        <input type="range" name="lapSlider" id="lapSlider" min=1 max=30 value=1, class="slider">
       </div>
       <div id="pos_plot"></div>
       <div id="tyre_plot"></div>
