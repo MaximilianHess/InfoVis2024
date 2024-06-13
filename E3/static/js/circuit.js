@@ -1,5 +1,6 @@
 export { init_circuit, update_race_data_and_race, set_circuit_from_globe}
-import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot } from "./positions.js";
+import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot} from "./positions.js";
+import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot} from "./tyres.js";
 
 // Global Variables
 var driver_dots, x_scale, y_scale, race_interval, line_circuit, svg, width, height, race_data, total_laps, last_index
@@ -19,7 +20,6 @@ function init_circuit(circuit_data) {
     update_race_data_and_race(selected_year, selected_round)
     update_driver_pos_first_lap(selected_year, selected_round)
     calculate_width_and_height(circuit_data)
-    render_select(circuit_data)
     render_circuit()
     set_circuit(circuit_data)
 }
@@ -168,6 +168,8 @@ function update_circuit() {
     })
     calculate_width_and_height(global_circuit_data)
     update_driver_pos_first_lap(selected_year, selected_round)
+    update_tyre_plot_first_lap(selected_year,selected_round)
+
 
     global_index = 0
 
@@ -193,34 +195,6 @@ function update_circuit() {
             .y(function (d) { return y_scale(d["y"]) })
         )
 }
-
-
-function render_select(circuit_data) {
-    var all_round_numbers = new Set(d3.map(circuit_data, (d) => d["round_number"]))
-    var all_years = new Set(d3.map(circuit_data, (d) => d["year"]))
-    d3.select("#selectCircuit")
-        .selectAll("myOptions")
-        .data(all_round_numbers)
-        .enter()
-        .append("option")
-        .text(function (d) { return d }) // text showed in the menu
-        .attr("value", function (d) { return d }) // corresponding value returned by the button
-        .style("top", "10px")
-        .style("left", "10px")
-
-
-    d3.select("#select_year")
-        .selectAll("myOptions")
-        .data(all_years)
-        .enter()
-        .append("option")
-        .text(function (d) { return d }) // text showed in the menu
-        .attr("value", function (d) { return d }) // corresponding value returned by the button
-        .style("top", "10px")
-        .style("left", "10px")
-}
-
-
 
 // Define a function to update data based on selected year
 function update_race_data_and_race(selected_year, selected_round) {
@@ -301,6 +275,7 @@ function init_lap_counter_and_slider(rd) {
     total_laps = d3.max(lapNumbers);
 
     adjust_x_axis_pos_plot(total_laps)
+    adjust_x_axis_tyre_plot(total_laps)
 
     d3.select("#lap_display").text(`1/${total_laps}`)
 
@@ -324,6 +299,7 @@ function update_lap(index) {
         current_lap = race_data[driver_index]["lap"][index]["LapNumber"];
         d3.select("#lap_display").text(`${current_lap}/${total_laps}`);
         update_driver_pos_chart(selected_year, selected_round, current_lap);
+        update_tyre_plot(selected_year,selected_round,current_lap)
     }
 
     function get_leading_driver() {
@@ -345,16 +321,11 @@ function update_lap(index) {
 
 function update_animation_lap(new_lap) {
 
-    let current_leader = -1;
     
     race_data.forEach((race, raceIndex) => {
         try {
             const temp_index = race.lap.findIndex(lap => lap.LapNumber == new_lap);
-            if (temp_index != -1 && race.pos[temp_index].Position == 1) {
-                console.log(`temp_index: ${temp_index}`);
-                console.log(`LapNumber: ${race.lap[temp_index].LapNumber}`);
-                console.log(`Race Data:`, race);
-                
+            if (temp_index != -1 && race.pos[temp_index].Position == 1) {                
                 global_index = temp_index;
                 current_leader = raceIndex;
             }
@@ -366,8 +337,6 @@ function update_animation_lap(new_lap) {
             }
         }
     });
-    console.log(`Global Index: ${global_index}`);
-    console.log(`Current Leader: ${current_leader}`);
 
 }
 
