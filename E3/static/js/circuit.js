@@ -82,11 +82,11 @@ function render_circuit() {
 
     // append the title
     svg.append("text")
-    .attr("x", width / 2) // centered horizontally
-    .attr("y", -20) 
-    .style("text-anchor", "middle")
-    .style("font-size", "16px")
-    .text(window.selectedCircuit_global + " " + window.selectedYear_global);
+        .attr("x", width / 2) // centered horizontally
+        .attr("y", -20)
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(window.selectedCircuit_global + " " + window.selectedYear_global);
 
     // TODO: This button has to be redone for the final design
     d3.select("#start_race").on("click", start_race)
@@ -178,6 +178,12 @@ function update_circuit() {
     update_driver_pos_first_lap(selected_year, selected_round)
     update_tyre_plot_first_lap(selected_year, selected_round)
 
+    const lap_slider = document.getElementById("lapSlider");
+    lap_slider.value = 1
+    lap_slider.max = total_laps
+
+    const speed_slider = document.getElementById("speedSlider")
+    speed_slider.value = -270
 
     global_index = 0
 
@@ -296,16 +302,19 @@ function init_lap_counter_and_slider(rd) {
             resume_race()
         })
 
-    d3.select("#speedSlider").on("input", function () {
-        stop_race()
-        animation_speed = -this.value;
-        resume_race()
-    })
+    d3.select("#speedSlider")
+        .on("input", function () {
+            stop_race()
+            animation_speed = -this.value;
+            resume_race()
+        })
 }
 function update_lap(index) {
     function update(driver_index) {
         current_leader = driver_index;
         current_lap = race_data[driver_index]["lap"][index]["LapNumber"];
+
+
         d3.select("#lap_display").text(`Lap ${current_lap}/${total_laps}`);
         update_driver_pos_chart(selected_year, selected_round, current_lap);
         update_tyre_plot(selected_year, selected_round, current_lap)
