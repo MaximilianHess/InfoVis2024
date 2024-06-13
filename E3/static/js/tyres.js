@@ -119,7 +119,7 @@ function update_tyre_plot(year, round_number, lap) {
             .attr("ry", 2)
             .style("fill", function (d) { return compound_colors[d["compound"]] }) // fill the rectangles based on the value according to the color scale
             .style("stroke", "black")  // Border color
-            .style("stroke-width", 1)
+            .style("stroke-width", 0.3)
             .on("mouseover", function (_, data) { // to do when the mouse hovers over
                 svg.selectAll("g.tick")
                     .filter(function (d) { return d == data["Driver"] })
@@ -133,6 +133,13 @@ function update_tyre_plot(year, round_number, lap) {
                     .style("font-size", "100%")
                     .classed("bold_tick", false)
             })
+
+        svg.append("text")
+            .attr("x", (width + margin.left + margin.right) / 2)
+            .attr("y", -10) 
+            .style("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text("Tyre compound per lap");
     });
 }
 

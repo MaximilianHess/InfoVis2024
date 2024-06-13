@@ -31,7 +31,13 @@ function render_pos_chart() {
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")")
-
+    
+    svg.append("text")
+            .attr("x", (width + margin.left + margin.right) / 2)
+            .attr("y", -30) // Adjust vertically as needed
+            .style("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text("Drivers' positions per lap");
 
     // scale the x axis between the min and max year available in the data
     x = d3.scaleLinear()
