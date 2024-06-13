@@ -231,6 +231,7 @@ function update_race(race_data) {
     .data(race_data)
     .enter()
     .append("circle")
+    .attr("stroke", "#636363")
     .attr("cx", d => x_scale(d.positions[0].x))
     .attr("cy", d => y_scale(d.positions[0].y))
     .attr("r", 6)
