@@ -202,6 +202,7 @@ def get_tyre_data(year, round_number, lap):
             "LapNumber",
             "IsPersonalBest",
             "Compound",
+            "Stint",
             "Position",
         ]
     )
@@ -212,29 +213,15 @@ def get_tyre_data(year, round_number, lap):
 
     df_lap_data = df_lap_data.join(df_driver_data, on=["round_number", "year", "DriverNumber"]).drop_nulls(subset="Position")
 
-    grouped_lap_data = df_lap_data.group_by('DriverNumber').agg([
-        pl.col('LapNumber').alias('lap'),
-        pl.col("Compound").alias('compound'),
+    grouped_lap_data = df_lap_data.group_by(["Driver","Stint"]).agg([
+        pl.col("LapNumber").min().alias("first_lap_stint"),
+        pl.col("LapNumber").max().alias("last_lap_stint"),
+        pl.col("Compound").last().alias("compound")
     ])
 
-    output_dict = {}
-
-    max_len = lap
-
-    for row in grouped_lap_data.collect().rows():
-        driver, lap_numbers, compounds = row
-        last_lap = lap_numbers[-1]
-        last_compound = compounds[-1]
-
-        lap_numbers.extend([last_lap] * (max_len - len(lap_numbers)))
-        compounds.extend([last_compound] * (max_len - len(compounds)))
-
-        output_dict[driver] = {
-            "laps": lap_numbers,
-            "compounds": compounds,
-        }
-
-    return jsonify({"data": output_dict})
+    output_dict = grouped_lap_data.collect().to_dicts()
+    
+    return jsonify(output_dict)
 
 #if __name__ == "__main__":
 #    app.run(debug=True)
