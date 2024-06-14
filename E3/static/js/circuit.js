@@ -72,7 +72,7 @@ function render_circuit() {
         .append("g")
         .append("path")
         .datum(circuit_data)
-        .attr("stroke", "#636363")
+        .attr("stroke", "#707070")
         .style("stroke-width", 6)
         .style("fill", "none")
         .attr("d", d3.line()
@@ -93,7 +93,6 @@ function render_circuit() {
     d3.select("#stop_race").on("click", stop_race)
     d3.select("#resume_race").on("click", resume_race)
 }
-
 
 
 function start_race() {
@@ -226,6 +225,9 @@ function update_race_data_and_race(selected_year, selected_round) {
         });
 }
 
+window.highlightedDrivers = {};
+window.anyHighlighted = false;
+
 // driver tooltip
 const driver_tooltip = d3.select("body")
     .append("div")
@@ -236,15 +238,17 @@ function update_race(race_data) {
     stop_race();
     svg.selectAll("circle").remove();
 
+    race_data.forEach(d => d.highlighted = window.highlightedDrivers[d.abbreviation] || false);
+
   driver_dots = svg.selectAll("circle")
     .data(race_data)
     .enter()
     .append("circle")
-    .attr("stroke", "#636363")
-    .attr("stroke-width", 0.25)
+    .attr("stroke", "white")
+    .attr("stroke-width", 0.5)
     .attr("cx", d => x_scale(d.positions[0].x))
     .attr("cy", d => y_scale(d.positions[0].y))
-    .attr("r", 6)
+    .attr("r", 7)
     .style("fill", d => `#${d.team_color}`)
     .on("mouseover", function(event, d) {
         // Calculate the tooltip position
@@ -257,6 +261,13 @@ function update_race(race_data) {
     })
     .on("mouseout", function() {
         driver_tooltip.style("display", "none");
+    })
+    .on("mousedown", function(event, d) {
+        d.highlighted = !d.highlighted;
+        window.highlightedDrivers[d.abbreviation] = d.highlighted;
+        window.anyHighlighted = race_data.some(driver => driver.highlighted);
+        driver_dots.style("opacity", driver => driver.highlighted || !window.anyHighlighted ? 1 : 0.3);
+        update_driver_pos_chart(selected_year, selected_round, current_lap); // call to update the position plot
     });
 }
 

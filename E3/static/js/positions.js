@@ -103,20 +103,14 @@ function update_driver_pos_first_lap(year, round_number) {
 
             lap_data = Object.values(lap_data)
 
-            svg.selectAll(".line-border")
-                .data(lap_data)
-                .enter()
-                .append("path")
-                .attr("class", "line-border")
-                .attr("d", function (d) {
-                    // Generate the line path string
-                    return d3.line()
-                        .x(function (d) { return x(d.lap); }) // Access the lap value
-                        .y(function (d) { return y(d.pos); })(d.values); // Access the position value
-                })
-                .attr("stroke", "#636363") 
-                .attr("stroke-width", 4.5)
-                .style("fill", "none");
+            svg.append("defs").append("filter")
+                .attr("id", "line-shadow") // Unique ID for the filter
+                .append("feDropShadow")
+                .attr("dx", 0)
+                .attr("dy", 0)
+                .attr("stdDeviation", 0.5) // Adjust the blur radius as needed
+                .attr("flood-color", "black") // Border color
+                .attr("flood-opacity", 1); // Full opacity for the border
 
             svg.selectAll(".line")
                 .data(lap_data)
@@ -129,10 +123,11 @@ function update_driver_pos_first_lap(year, round_number) {
                         .x(function (d) { return x(d.lap); }) // Access the lap value
                         .y(function (d) { return y(d.pos); })(d.values); // Access the position value
                 })
-                .attr("stroke", d => d.color) // Set stroke color
+                .attr("fill", d => d.color) // Set stroke color
+                .style("stroke-opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
                 .attr("stroke-width", 4)
                 .style("fill", "none")
-
+                .style("filter", "url(#line-shadow)");
 
 
             const lap_data_dots = lap_data.map(d => {
@@ -157,6 +152,7 @@ function update_driver_pos_first_lap(year, round_number) {
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
                 .style("stroke", "#636363")
                 .style("stroke-width", 0.2)
         })
@@ -169,14 +165,14 @@ function update_driver_pos_chart(year, round_number, lap) {
         .then(function (lap_data) {
             lap_data = Object.values(lap_data)
 
-            svg.selectAll(".line-border")
-                .data(lap_data)
-                .attr("d", function (d) {
-                    // Generate the line path string
-                    return d3.line()
-                        .x(function (d) { return x(d.lap); }) // Access the lap value
-                        .y(function (d) { return y(d.pos); })(d.values); // Access the position value
-                })
+            svg.append("defs").append("filter")
+            .attr("id", "line-shadow") // Unique ID for the filter
+            .append("feDropShadow")
+            .attr("dx", 0)
+            .attr("dy", 0)
+            .attr("stdDeviation", 0.5) // Adjust the blur radius as needed
+            .attr("flood-color", "black") // Border color
+            .attr("flood-opacity", 1); // Full opacity for the border
 
             svg.selectAll(".line")
                 .data(lap_data)
@@ -187,6 +183,8 @@ function update_driver_pos_chart(year, round_number, lap) {
                         .y(function (d) { return y(d.pos); })(d.values); // Access the position value
                 })
                 .attr("stroke", d => d.color)
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
+                .style("filter", "url(#line-shadow)");
 
 
             const lap_data_dots = lap_data.map(d => {
@@ -207,14 +205,9 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("cx", function (d) { return x(d.lap); }) // Set the x position of the cycle marker
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .style("fill", d => d.color)
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
                 .on("mouseover", function (event, d) {
-                    
-                    /*svg.selectAll("g.tick")
-                    .filter(function (data) { return data == d["pos"] })
-                    .style("font-size", "120%")
-                    .classed("bold_tick", true)*/
 
-                    // Position tooltip above the dot
                     driver_tooltip
                         .style("left", `${x(d.lap)}px`- width - 100)
                         .style("top", `${y(d.pos)}px`)
@@ -225,16 +218,14 @@ function update_driver_pos_chart(year, round_number, lap) {
                 })
                 .on("mouseout", function () {
                     driver_tooltip.style("display", "none");
-                    /*d3.selectAll("g.tick.bold_tick")
-                    .style("font-weight", "normal")
-                    .style("font-size", "100%")
-                    .classed("bold_tick", false)*/
+
                 });
 
             svg.selectAll(".dot_labels")
             .data(lap_data_dots)
             .join("text") 
             .attr("class", "dot_labels")
+            .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
             .attr("x", function(d) { return x(d.lap) + 8; }) 
             .attr("y", function(d) { return y(d.pos) + 4; }) 
             .text(function(d) { return `${d.abbr}`; }); 
