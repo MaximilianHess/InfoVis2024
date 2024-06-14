@@ -74,22 +74,6 @@ function render_tyre_plot() {
 
     svg.selectAll(".x-axis .tick text")
         .attr("class", "ticks")
-
-    /*     const color = get_color_scale()
-    
-    
-        svg.append("g")
-            .selectAll()
-            .data(stacked_data)
-            .join("g")
-            .attr("fill", d => color(d.key))
-            .selectAll("rect")
-            .data(D => D.map(d => (d.key = D.key, d)))
-            .join("rect")
-            .attr("x", d => x(d[0]))
-            .attr("y", d => y(d.data[0]))
-            .attr("height", y.bandwidth())
-            .attr("width", d => x(d[1]) - x(d[0])) */
 }
 
 

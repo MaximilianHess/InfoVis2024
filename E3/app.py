@@ -209,11 +209,13 @@ def get_tyre_data(year, round_number, lap):
 
     df_lap_data = df_lap_data.filter((pl.col("year") == year) & (pl.col("round_number") == round_number) & (pl.col("LapNumber") <= lap))
 
+    df_lap_data = df_lap_data.drop_nulls(subset="Compound")
+
     df_driver_data = df_driver_data.select(["round_number", "year", "DriverNumber", "TeamColor"])
 
-    df_lap_data = df_lap_data.join(df_driver_data, on=["round_number", "year", "DriverNumber"]).drop_nulls(subset="Position")
+    df_tyre_data = df_lap_data.join(df_driver_data, on=["round_number", "year", "DriverNumber"]).drop_nulls(subset="Position")
 
-    grouped_lap_data = df_lap_data.group_by(["Driver","Stint"]).agg([
+    grouped_lap_data = df_tyre_data.group_by(["Driver","Stint"]).agg([
         pl.col("LapNumber").min().alias("first_lap_stint"),
         pl.col("LapNumber").max().alias("last_lap_stint"),
         pl.col("Compound").last().alias("compound")
