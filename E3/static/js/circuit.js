@@ -9,7 +9,7 @@ var race_restart = false
 var selected_round = 1
 var selected_year = 2020
 var max_width_or_height = 800
-var animation_speed = 20
+var animation_speed = 270
 var global_circuit_data
 var current_lap = 1
 var current_leader = 1
@@ -99,6 +99,13 @@ function render_circuit() {
 function start_race() {
     stop_race()
 
+    const lap_slider = document.getElementById("lapSlider");
+    lap_slider.value = 1    
+
+    const speed_slider = document.getElementById("speedSlider")
+    speed_slider.value = -270
+    animation_speed = 270
+
     init_lap_counter_and_slider(race_data)
     driver_dots
         .attr("cx", d => x_scale(d.positions[0].x))
@@ -106,12 +113,6 @@ function start_race() {
 
     animate_race(0)
 
-    const lap_slider = document.getElementById("lapSlider");
-    lap_slider.value = 1    
-
-    const speed_slider = document.getElementById("speedSlider")
-    speed_slider.value = -270
-    animation_speed = -270
 }
 
 function stop_race() {
@@ -315,6 +316,10 @@ function update_lap(index) {
     function update(driver_index) {
         current_leader = driver_index;
         current_lap = race_data[driver_index]["lap"][index]["LapNumber"];
+
+
+    const lap_slider = document.getElementById("lapSlider");
+    lap_slider.value = current_lap    
 
 
         d3.select("#lap_display").text(`Lap ${current_lap}/${total_laps}`);
