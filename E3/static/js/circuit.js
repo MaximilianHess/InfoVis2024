@@ -8,7 +8,7 @@ var global_index = 0
 var race_restart = false
 var selected_round = 1
 var selected_year = 2020
-var max_width_or_height = 800
+var max_width_or_height = window.innerWidth/2;
 var animation_speed = 270
 var global_circuit_data
 var current_lap = 1
@@ -241,6 +241,7 @@ function update_race(race_data) {
     .enter()
     .append("circle")
     .attr("stroke", "#636363")
+    .attr("stroke-width", 0.1)
     .attr("cx", d => x_scale(d.positions[0].x))
     .attr("cy", d => y_scale(d.positions[0].y))
     .attr("r", 6)

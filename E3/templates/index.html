@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project</title>
+  <title>Formula 1 Circuit Explorer</title>
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
 </head>
 
@@ -12,19 +12,24 @@
 
 
   <div id="start_page" class="active">
+    <div class="background-image"></div>
+    <div class="logo-container">
+      <img src="../static/styles/logo.webp">
+    </div>
     <div class="title">
       <h1>Formula 1</h1>
-      <h2>Exploratory Analysis</h2>
+      <h2>Exploratory analysis of F1 circuits through the years</h2>
     </div>
 
-    <div id="globe_container">
-      <div id="slider-container">
-        <div id="slider"></div>
-        <div id="years-labels"></div>
-      </div>
-      <div id="globe"></div>
+    <div id="slider-container">
+      <div class="slider-text"> Choose a year</div>
+      <div id="year-slider"></div>
+      <div id="years-labels"></div>
     </div>
-    <button id="switch_to_race_page">Go to Race Page</button>
+
+      <div id="globe"></div>
+    
+    <button id="hidden_switch_to_race_page" style="display: none;">Go to Race Page</button>
   </div>
 
   <div id="race_page">

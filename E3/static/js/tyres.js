@@ -1,8 +1,8 @@
 export { init_tyre_plot, update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot };
 
-var margin = { top: 100, right: 50, bottom: 50, left: 50 },
-    width = 1000 - margin.left - margin.right,
-    height = 450 - margin.top - margin.bottom
+var margin = { top: 300, right: 50, bottom: 50, left: 50 }
+var width = window.innerWidth/2;
+var height = window.innerHeight/2;
 
 const default_year = 2020
 const default_round = 1
@@ -135,7 +135,7 @@ function update_tyre_plot(year, round_number, lap) {
 
         svg.append("text")
             .attr("x", (width + margin.left + margin.right) / 2)
-            .attr("y", -10) 
+            .attr("y", 100) 
             .style("text-anchor", "middle")
             .style("font-size", "16px")
             .text("Tyre compound per lap");
@@ -200,7 +200,7 @@ function update_tyre_plot_first_lap(year, round_number) {
             .attr("rx", 2)
             .attr("ry", 2)
             .style("fill", function (d) { return compound_colors[d["compound"]] }) // fill the rectangles based on the value according to the color scale
-            .style("stroke", "black")  // Border color
+            .style("stroke", "#636363")  
             .style("stroke-width", 1)
             .on("mouseover", function (_, data) { // to do when the mouse hovers over
                 svg.selectAll("g.tick")

@@ -6,9 +6,9 @@ var svg
 var line
 
 
-var margin = { top: 100, right: 50, bottom: 50, left: 50 },
-    width = 1000 - margin.left - margin.right,
-    height = 450 - margin.top - margin.bottom
+var margin = { top: 100, right: 50, bottom: 50, left: 50 }
+var width = window.innerWidth/2;
+var height = window.innerHeight/2;
 
 function init_pos_plot() {
     render_pos_chart()
@@ -31,27 +31,27 @@ function render_pos_chart() {
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")")
-
+    
     svg.append("text")
-        .attr("x", (width + margin.left + margin.right) / 2)
-        .attr("y", -30)
-        .style("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text("Drivers' positions per lap");
-
+            .attr("x", (width + margin.left + margin.right) / 2)
+            .attr("y", -30) 
+            .style("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text("Drivers' positions per lap");
+    
     // x axis label
     svg.append("text")
-        .attr("x", (width + margin.left + margin.right) / 2)
-        .attr("y", + height + 40)
-        .style("text-anchor", "middle")
-        .style("font-size", "12px")
-        .text("Lap number");
+            .attr("x", (width + margin.left + margin.right) / 2)
+            .attr("y", + height + 40) 
+            .style("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Lap number");
 
     // y axis label
     svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("x", -(height / 2))
-        .attr("y", -margin.left + 10)
+        .attr("x", -(height / 2)) // Place text in the middle of the height, but flipped due to rotation
+        .attr("y", -margin.left + 10) // Adjust vertically as needed to fit within margins
         .style("text-anchor", "middle")
         .style("font-size", "12px")
         .text("Position");
@@ -99,6 +99,8 @@ function update_driver_pos_first_lap(year, round_number) {
     d3.json(`/get_lap_data/${year}/${round_number}/${1}`)
         .then(function (lap_data) {
 
+            update_driver_pos_chart(year, round_number, 1)
+
             lap_data = Object.values(lap_data)
 
             svg.selectAll(".line-border")
@@ -112,7 +114,7 @@ function update_driver_pos_first_lap(year, round_number) {
                         .x(function (d) { return x(d.lap); }) // Access the lap value
                         .y(function (d) { return y(d.pos); })(d.values); // Access the position value
                 })
-                .attr("stroke", "black") // Set stroke color
+                .attr("stroke", "#636363") 
                 .attr("stroke-width", 4.5)
                 .style("fill", "none");
 
@@ -155,8 +157,8 @@ function update_driver_pos_first_lap(year, round_number) {
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
-                .style("stroke", "black")
-                .style("stroke-width", 0.1)
+                .style("stroke", "#636363")
+                .style("stroke-width", 0.25)
                 .on("mouseover", function (_, data) { // to do when the mouse hovers over
                     svg.selectAll("g.tick")
                         .filter(function (d) { return d == data["pos"] })
@@ -219,12 +221,12 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .style("fill", d => d.color)
                 .on("mouseover", function (event, d) {
-
+                    
                     svg.selectAll("g.tick")
-                        .filter(function (data) { return data == d["pos"] })
-                        .style("font-weight", "bolder")
-                        .style("font-size", "120%")
-                        .classed("bold_tick", true)
+                    .filter(function (data) { return data == d["pos"] })
+                    .style("font-weight", "bolder")
+                    .style("font-size", "120%")
+                    .classed("bold_tick", true)
 
                     // Position tooltip above the dot
                     driver_tooltip
@@ -237,18 +239,18 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .on("mouseout", function () {
                     driver_tooltip.style("display", "none");
                     d3.selectAll("g.tick.bold_tick")
-                        .style("font-weight", "normal")
-                        .style("font-size", "100%")
-                        .classed("bold_tick", false)
+                    .style("font-weight", "normal")
+                    .style("font-size", "100%")
+                    .classed("bold_tick", false)
                 });
 
             svg.selectAll(".dot_labels")
-                .data(lap_data_dots)
-                .join("text")
-                .attr("class", "dot_labels")
-                .attr("x", function (d) { return x(d.lap) + 8; })
-                .attr("y", function (d) { return y(d.pos) + 4; })
-                .text(function (d) { return `${d.abbr}`; });
+            .data(lap_data_dots)
+            .join("text") 
+            .attr("class", "dot_labels")
+            .attr("x", function(d) { return x(d.lap) + 8; }) 
+            .attr("y", function(d) { return y(d.pos) + 4; }) 
+            .text(function(d) { return `${d.abbr}`; }); 
         })
 }
 

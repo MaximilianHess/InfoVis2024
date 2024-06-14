@@ -13,18 +13,42 @@
 }
 /* Ensure both pages are absolutely positioned within a parent container */
 #start_page, #race_page {
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none; /* Initially hide both */
+  left: 1vw; 
+  width: 99vw; 
+  height: 100vh;
 }
 
 #start_page {
   display: flex; /* Show the start page initially */
   justify-content: center; 
   align-items: center; 
+}
+
+.background-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('background.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.logo-container {
+  position: absolute;
+  top: 1vh; 
+  right: 1vw;
+  width: 10vh;
+  height: 10vh; 
+  z-index: 3;
+}
+
+.logo-container img {
+  max-width: 100%;
+  max-height: 100%; 
+  display: block; 
 }
 
 body {
@@ -34,33 +58,89 @@ body {
   align-items: center; 
   height: 100vh; 
   margin: 0; 
-  position: relative; /* Ensure body acts as a positioning context */
+  position: relative; 
+  background-color: #FAF9F6;
 }
 
 .title {
-  text-align: center; 
+  position: absolute;
+  top: 5%;
+  left: 1%;
+  width: 30%; 
+  height: 30vh; 
   display: flex;
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
+  flex-direction: column;
+  align-items: left;
+  z-index: 1; 
 }
 
 .title h1 {
   font-family: 'Formula1-Bold';
-  font-size: 18px;
+  font-size: 30px;
 }
 
 .title h2 {
   font-family: 'Formula1-Regular';
-  font-size: 15px;
+  font-size: 20px;
+  color:#4f4e4e;
 }
+
 
 #globe {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80vw;
-  height: 80vh;
+  width: 100%; 
+  height: 100%; 
+  z-index: 2; 
+}
+
+#slider-container {
+  margin-left: 10vw;
+  width: 20vw; 
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1; 
+}
+
+#year-slider {
+  width: 18vh;
+  height: 50%; 
+  transform: rotate(90deg);
+  transform-origin: center; 
+  outline: none; 
+  z-index: 1;
+}
+
+
+.slider-text {
+  position: absolute;
+  margin-bottom: 25vh;
+  margin-left: 7vw;
+  text-align: right;
+  font-size: 14px;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+#years-labels {
+  display: inline-block; 
+  vertical-align: top; 
+  margin-left: 0px; 
+}
+
+.year-label {
+  text-align: left;
+  margin-top: 7px;
+}
+
+.year-label.bold {
+  font-family: 'Formula1-Bold', sans-serif;
+}
+
+.year-label.normal {
+  color: black;
 }
 
 #globe_tooltip {
@@ -85,6 +165,45 @@ body {
   font-family: 'Formula1-Regular', sans-serif;
 }
 
+
+#race_page {
+  display: flex;
+  height: 100vh;
+}
+
+#circuit_container {
+  width: 50%;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: pink;
+}
+
+#pos_plot {
+  width: 50%;
+  height: 50%;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: blue;
+}
+
+#tyre_plot{
+  width: 50%;
+  height: 50%;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: violet;
+}
+
+.dot_labels {
+  font-size: 12px;
+  fill: black;
+  font-family: 'Formula1-Bold', sans-serif;
+  background: rgba(255, 255, 255, 0.8); 
+  z-index: 10; 
+  padding: 2px; 
+  border-radius: 3px;
+}
+
 #driver_tooltip {
   position: absolute;
   background: rgba(255, 255, 255, 0.8); 
@@ -98,57 +217,6 @@ body {
   font-family: 'Formula1-Bold', sans-serif; 
 }
 
-
-#globe_container {
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  height: 100vh; 
-  margin: 0; 
-}
-
-#slider-container {
-  display: flex;
-  align-items: center;
-}
-
-#slider {
-  width: 130px;
-  height: 100px; /* Height of the slider track */
-  margin-right: 0px; 
-  transform: rotate(90deg);
-  outline: none; /* Remove outline */
-}
-
-
-#years-labels {
-  display: inline-block; 
-  vertical-align: top; 
-  margin-left: 0px; 
-}
-
-.year-label {
-  text-align: left;
-  margin-top: 7px;
-}
-
-.year-label.bold {
-  font-family: 'Formula1-Bold', sans-serif;
-}
-
-.year-label.normal {
-  color: black;
-}
-
-.dot_labels {
-  font-size: 12px;
-  fill: black;
-  font-family: 'Formula1-Bold', sans-serif;
-  background: rgba(255, 255, 255, 0.8); 
-  z-index: 10; 
-  padding: 2px; 
-  border-radius: 3px;
-}
 .slidecontainer {
   width: 30%; /* Width of the outside container */
 }

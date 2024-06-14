@@ -19,14 +19,15 @@ function init_globe(globe_data, circuit_geo_data) {
 // colors
 const GLOBE_FILL = "#EEE";
 const COUNTRY_FILL = "#ff392e";
-const LOC_COLOR = "#000081";
+const LOC_COLOR = "black";
+const LINE_COLOR = "black";
 
 // dimensions
 let GLOBE_WIDTH = window.innerWidth;
 let GLOBE_HEIGHT = window.innerHeight;
 let GLOBE_RADIUS = 400;
 let GLOBE_CENTER = [GLOBE_WIDTH / 2, GLOBE_HEIGHT / 2];
-let TILT = 35;
+let TILT = 45;
 const DOT_RADIUS = 5;
 
 // interaction
@@ -179,31 +180,32 @@ function render_globe(globe_data, circuit_geo_data) {
         const years = Array.from({ length: 5 }, (_, index) => 2020 + index);
     
         const sliderContainer = d3.select("#slider-container");
-        
-        // Check if the slider already exists
-        const existingSlider = sliderContainer.select("#slider input");
-        if (!existingSlider.empty()) {
-            return; // Slider already exists, no need to recreate
+    
+        // Check if the slider input already exists
+        const existingSlider = sliderContainer.select("#year-slider");
+        const existingSliderInput = existingSlider.select("input");
+        if (!existingSliderInput.empty()) {
+            return; // Slider input already exists, no need to recreate
         }
     
         // Append the slider input element
-        const slider = sliderContainer.select("#slider")
+        const slider = existingSlider
             .append("input")
             .attr("type", "range")
             .attr("min", 0)
             .attr("max", years.length - 1)
             .attr("value", 0)
             .attr("step", 1)
+            .classed("slider", true)
             .on("input", function() {
                 const selectedYearIndex = +this.value;
                 const selectedYear = years[selectedYearIndex];
-                updateData(selectedYear); // update data based on selected year
+                updateData(selectedYear); // Update data based on selected year
                 updateLabels(selectedYearIndex); 
-                window.selectedYear_global = selectedYear;  // write global var
-                rotationAllowed = true; // restart the globe rotation when another year is chosen
+                window.selectedYear_global = selectedYear;  // Write global var
+                rotationAllowed = true; // Restart the globe rotation when another year is chosen
             });
     
-            
         // Append the year labels
         const labelsContainer = sliderContainer.select("#years-labels");
     
@@ -212,19 +214,19 @@ function render_globe(globe_data, circuit_geo_data) {
             .enter()
             .append("div")
             .attr("class", "year-label")
-            .style("text-align", "left")
             .text(d => d);
-
+    
         function updateLabels(selectedYearIndex) {
             labelsContainer.selectAll("div")
                 .classed("bold", (d, i) => i === selectedYearIndex)
                 .classed("normal", (d, i) => i !== selectedYearIndex);
         }
-            
+    
         // Initialize the labels with the first year highlighted
         updateLabels(0);
     }
-    
+
+
     function updateData(selectedYear) {
         return new Promise((resolve, reject) => {
             d3.json(`/update_circuit_geo_data/${selectedYear}`)
@@ -300,9 +302,9 @@ function render_globe(globe_data, circuit_geo_data) {
         .datum(arc)
         .attr('d', path)
         .attr('fill', 'none')
-        .attr('stroke', LOC_COLOR)
-        .attr('stroke-width', 3)
-        .style('opacity', 0.1);
+        .attr('stroke', LINE_COLOR)
+        .attr('stroke-width', 2)
+        .style('opacity', 0.06);
     }
     
     // Start the world tour
@@ -384,6 +386,6 @@ function showRacePage() {
     document.getElementById('race_page').style.display = 'none';
     
     // Add event listeners to the buttons
-    document.getElementById('switch_to_race_page').addEventListener('click', showRacePage);
+    //document.getElementById('switch_to_race_page').addEventListener('click', showRacePage);
     document.getElementById('switch_to_start_page').addEventListener('click', showStartPage);
     });
