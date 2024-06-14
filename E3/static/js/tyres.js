@@ -129,7 +129,7 @@ function update_tyre_plot(year, round_number, lap) {
                 svg.selectAll("g.tick")
                     .filter(function (d) { return d == data["Driver"] })
                     .style("font-weight", "bolder")
-                    .style("font-size", "110%")
+                    .style("font-size", "130%")
                     .classed("bold_tick", true)
             })
             .on("mouseout", function () {

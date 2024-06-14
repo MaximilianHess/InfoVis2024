@@ -159,18 +159,6 @@ function update_driver_pos_first_lap(year, round_number) {
                 .style("fill", d => d.color)
                 .style("stroke", "#636363")
                 .style("stroke-width", 0.2)
-                .on("mouseover", function (_, data) { // to do when the mouse hovers over
-                    svg.selectAll("g.tick")
-                        .filter(function (d) { return d == data["pos"] })
-                        .style("font-size", "120%")
-                        .classed("bold_tick", true)
-                })
-                .on("mouseout", function () {
-                    d3.selectAll("g.tick.bold_tick")
-                        .style("font-weight", "normal")
-                        .style("font-size", "100%")
-                        .classed("bold_tick", false)
-                })
         })
 
 }
@@ -221,25 +209,26 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .style("fill", d => d.color)
                 .on("mouseover", function (event, d) {
                     
-                    svg.selectAll("g.tick")
+                    /*svg.selectAll("g.tick")
                     .filter(function (data) { return data == d["pos"] })
                     .style("font-size", "120%")
-                    .classed("bold_tick", true)
+                    .classed("bold_tick", true)*/
 
                     // Position tooltip above the dot
                     driver_tooltip
                         .style("left", `${x(d.lap)}px`- width - 100)
                         .style("top", `${y(d.pos)}px`)
                         .style("display", "block")
-                        .html(`<span class="tooltip-bold">${d.first_name}, ${d.last_name}</span><br>
-                              <span class="tooltip-regular">${d.team_name}</span>`);
+                        .html(`<span class="tooltip-bold">${d.first_name} ${d.last_name}</span><br>
+                              <span class="tooltip-regular">${d.team_name} <br>
+                              Current Position: ${d.pos}</span>`);
                 })
                 .on("mouseout", function () {
                     driver_tooltip.style("display", "none");
-                    d3.selectAll("g.tick.bold_tick")
+                    /*d3.selectAll("g.tick.bold_tick")
                     .style("font-weight", "normal")
                     .style("font-size", "100%")
-                    .classed("bold_tick", false)
+                    .classed("bold_tick", false)*/
                 });
 
             svg.selectAll(".dot_labels")
