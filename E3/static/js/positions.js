@@ -5,10 +5,9 @@ var x
 var svg
 var line
 
-
-var margin = { top: 100, right: 50, bottom: 50, left: 50 }
-var width = window.innerWidth/2;
-var height = window.innerHeight/2;
+var margin = { top: 40, right: 50, bottom: 40, left: 70 }
+var width = window.innerWidth/2 ;
+var height = window.innerHeight/2 - 100;
 
 function init_pos_plot() {
     render_pos_chart()
@@ -32,28 +31,29 @@ function render_pos_chart() {
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")")
     
+    // title
     svg.append("text")
             .attr("x", (width + margin.left + margin.right) / 2)
-            .attr("y", -30) 
+            .attr("y", -(margin.top - 25)) 
             .style("text-anchor", "middle")
-            .style("font-size", "16px")
+            .style("font-size", "14px")
             .text("Drivers' positions per lap");
     
     // x axis label
     svg.append("text")
             .attr("x", (width + margin.left + margin.right) / 2)
-            .attr("y", + height + 40) 
+            .attr("y",  height + 35) 
             .style("text-anchor", "middle")
-            .style("font-size", "12px")
+            .style("font-size", "10px")
             .text("Lap number");
 
     // y axis label
     svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("x", -(height / 2)) // Place text in the middle of the height, but flipped due to rotation
-        .attr("y", -margin.left + 10) // Adjust vertically as needed to fit within margins
+        .attr("x", -(height / 2)) 
+        .attr("y", -margin.left + 20) 
         .style("text-anchor", "middle")
-        .style("font-size", "12px")
+        .style("font-size", "10px")
         .text("Position");
 
     x = d3.scaleLinear()
@@ -158,12 +158,11 @@ function update_driver_pos_first_lap(year, round_number) {
                 .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
                 .style("stroke", "#636363")
-                .style("stroke-width", 0.25)
+                .style("stroke-width", 0.2)
                 .on("mouseover", function (_, data) { // to do when the mouse hovers over
                     svg.selectAll("g.tick")
                         .filter(function (d) { return d == data["pos"] })
-                        .style("font-weight", "bolder")
-                        .style("font-size", "110%")
+                        .style("font-size", "120%")
                         .classed("bold_tick", true)
                 })
                 .on("mouseout", function () {
@@ -224,14 +223,13 @@ function update_driver_pos_chart(year, round_number, lap) {
                     
                     svg.selectAll("g.tick")
                     .filter(function (data) { return data == d["pos"] })
-                    .style("font-weight", "bolder")
                     .style("font-size", "120%")
                     .classed("bold_tick", true)
 
                     // Position tooltip above the dot
                     driver_tooltip
-                        .style("left", `${x + 55}px`)
-                        .style("top", `${y + 630}px`)
+                        .style("left", `${x(d.lap)}px`- width - 100)
+                        .style("top", `${y(d.pos)}px`)
                         .style("display", "block")
                         .html(`<span class="tooltip-bold">${d.first_name}, ${d.last_name}</span><br>
                               <span class="tooltip-regular">${d.team_name}</span>`);

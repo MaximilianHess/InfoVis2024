@@ -1,8 +1,8 @@
 export { init_tyre_plot, update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot };
 
-var margin = { top: 300, right: 50, bottom: 50, left: 50 }
+var margin = { top: 50, right: 50, bottom: 40, left: 70 }
 var width = window.innerWidth/2;
-var height = window.innerHeight/2;
+var height = window.innerHeight/2 -100;
 
 const default_year = 2020
 const default_round = 1
@@ -28,7 +28,6 @@ function init_tyre_plot() {
 
 function render_tyre_plot() {
 
-
     //const tyre_data = fetch_tyre_data(default_year, default_round, default_lap)
     //const stacked_data = stack_data(tyre_data)
     //const height = caluculate_height_of_plot(stacked_data)
@@ -44,20 +43,27 @@ function render_tyre_plot() {
     // x axis label
     svg.append("text")
         .attr("x", (width + margin.left + margin.right) / 2)
-        .attr("y", + height + 40) 
+        .attr("y",  height + 35) 
         .style("text-anchor", "middle")
-        .style("font-size", "12px")
-        .text("Driver");
+        .style("font-size", "10px")
+        .text("Lap number");
 
     // y axis label
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -(height / 2)) 
-        .attr("y", -margin.left + 10) 
+        .attr("y", -margin.left + 20) 
         .style("text-anchor", "middle")
-        .style("font-size", "12px")
-        .text("Lap number");
+        .style("font-size", "10px")
+        .text("Driver");
 
+    // title
+    svg.append("text")
+    .attr("x", (width + margin.left + margin.right) / 2)
+    .attr("y", -(margin.top - 40)) 
+    .style("text-anchor", "middle")
+    .style("font-size", "14px")
+    .text("Tyre compound per lap");
 
     x = d3.scaleLinear()
         .domain([0, 100])
@@ -132,13 +138,6 @@ function update_tyre_plot(year, round_number, lap) {
                     .style("font-size", "100%")
                     .classed("bold_tick", false)
             })
-
-        svg.append("text")
-            .attr("x", (width + margin.left + margin.right) / 2)
-            .attr("y", 100) 
-            .style("text-anchor", "middle")
-            .style("font-size", "16px")
-            .text("Tyre compound per lap");
     });
 }
 

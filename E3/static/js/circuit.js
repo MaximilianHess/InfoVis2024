@@ -8,7 +8,7 @@ var global_index = 0
 var race_restart = false
 var selected_round = 1
 var selected_year = 2020
-var max_width_or_height = window.innerWidth/2;
+var max_width_or_height = window.innerHeight/1.4;
 var animation_speed = 270
 var global_circuit_data
 var current_lap = 1
@@ -82,11 +82,11 @@ function render_circuit() {
 
     // append the title
     svg.append("text")
-        .attr("x", width / 2) // centered horizontally
-        .attr("y", -20)
-        .style("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text(window.selectedCircuit_global + " " + window.selectedYear_global);
+    .attr("x", width / 2) // centered horizontally
+    .attr("y", -30)
+    .style("text-anchor", "middle")
+    .style("font-size", "16px")
+    .html(`<tspan class="tooltip-bold">${window.selectedCircuit_global}</tspan> <tspan class="tooltip-bold">${window.selectedYear_global}</tspan>`);
 
     // TODO: This button has to be redone for the final design
     d3.select("#start_race").on("click", start_race)
@@ -241,7 +241,7 @@ function update_race(race_data) {
     .enter()
     .append("circle")
     .attr("stroke", "#636363")
-    .attr("stroke-width", 0.1)
+    .attr("stroke-width", 0.25)
     .attr("cx", d => x_scale(d.positions[0].x))
     .attr("cy", d => y_scale(d.positions[0].y))
     .attr("r", 6)
@@ -250,8 +250,8 @@ function update_race(race_data) {
         // Calculate the tooltip position
         const [x, y] = d3.pointer(event);
         driver_tooltip
-            .style("left", `${x + 30}px`)
-            .style("top", `${y + 10}px`)  
+            .style("left", `${x + 70}px`)
+            .style("top", `${y + 50}px`)  
             .style("display", "block")
             .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
     })
@@ -279,7 +279,6 @@ function calculate_width_and_height(circuit_data) {
         height = (max_width_or_height - margin.top - margin.bottom)
     }
 }
-
 
 
 function set_race_global_race_data(rd) {

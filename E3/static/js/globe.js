@@ -143,6 +143,7 @@ function render_globe(globe_data, circuit_geo_data) {
             .attr("class", "pin")
             .attr("r", DOT_RADIUS)
             .attr("fill", LOC_COLOR) 
+            .attr("opacity", 0.7) 
             .attr("transform", function(d) {
                 const coords = [d.long, d.lat]; 
                 const visibility = isInView(projection, coords) ? "visible" : "hidden";
