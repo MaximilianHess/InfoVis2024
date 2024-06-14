@@ -1,8 +1,5 @@
 export { init_tyre_plot, update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot };
 
-
-
-
 var margin = { top: 100, right: 50, bottom: 50, left: 50 },
     width = 1000 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom
@@ -43,6 +40,24 @@ function render_tyre_plot() {
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")")
+    
+    // x axis label
+    svg.append("text")
+        .attr("x", (width + margin.left + margin.right) / 2)
+        .attr("y", + height + 40) 
+        .style("text-anchor", "middle")
+        .style("font-size", "12px")
+        .text("Driver");
+
+    // y axis label
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -(height / 2)) 
+        .attr("y", -margin.left + 10) 
+        .style("text-anchor", "middle")
+        .style("font-size", "12px")
+        .text("Lap number");
+
 
     x = d3.scaleLinear()
         .domain([0, 100])

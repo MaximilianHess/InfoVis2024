@@ -18,8 +18,8 @@ function init_globe(globe_data, circuit_geo_data) {
 // CONSTANTS
 // colors
 const GLOBE_FILL = "#EEE";
-const COUNTRY_FILL = "#FF6961";
-const LOC_COLOR = "navy";
+const COUNTRY_FILL = "#ff392e";
+const LOC_COLOR = "#000081";
 
 // dimensions
 let GLOBE_WIDTH = window.innerWidth;
@@ -297,17 +297,17 @@ function render_globe(globe_data, circuit_geo_data) {
     function renderLines(arc) {
 
         svg.append('path')
-            .datum(arc)
-            .attr('d', path)
-            .attr('fill', 'none')
-            .attr('stroke', LOC_COLOR)
-            .attr('stroke-width', 1);
+        .datum(arc)
+        .attr('d', path)
+        .attr('fill', 'none')
+        .attr('stroke', LOC_COLOR)
+        .attr('stroke-width', 3)
+        .style('opacity', 0.1);
     }
     
     // Start the world tour
     worldTour(circuit_geo_data, projection);
 }
-
 
 
 // template: https://observablehq.com/@d3/world-tour?intent=fork
