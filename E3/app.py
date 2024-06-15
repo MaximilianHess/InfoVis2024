@@ -1,10 +1,7 @@
 from flask import Flask, render_template, jsonify
 import pandas as pd
-from polars import col as c
 import polars as pl
-from sklearn import decomposition, preprocessing
 import numpy as np
-import fastf1
 import json 
 
 app = Flask(__name__)
@@ -24,7 +21,7 @@ def rotate(xy, *, angle):
     )
     return np.matmul(xy, rot_mat)
 
-def dev_circuit_data():
+def get_circuit_data():
     # Temp development solution
     df_circuits = pd.read_parquet("./static/data/all_tracks_new.parquet")
     return df_circuits.to_json(orient="records")
@@ -233,12 +230,11 @@ def get_tyre_data(year, round_number, lap):
 def index():
     globe_data = get_world_data()
     circuit_geo_data = get_circuit_geo_data(2020)  # Initial data for the default season
-    circuit_data = dev_circuit_data()
     
     return render_template("index.html",
                         globe_data=globe_data,
                         circuit_geo_data=circuit_geo_data,
-                        circuit_data=dev_circuit_data())
+                        circuit_data=get_circuit_data())
 
 # Initiate the server in debug mode
 if __name__ == "__main__":
