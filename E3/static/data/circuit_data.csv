@@ -1,5 +1,5 @@
 circuitId,circuitName,long,lat,locality,country,round_number,year,gp_name,circuit_code
-red_bull_ring,Red Bull Ring,14.7647,47.2197,Spielberg,Austria,1,2020,Austrian Grand Prix,red_bull_ring
+red_bull_ring,Red Bull Ring,14.7647,47.2197,Spielberg,Austria,2,2020,Styrian Grand Prix,red_bull_ring
 hungaroring,Hungaroring,19.2486,47.5789,Budapest,Hungary,3,2020,Hungarian Grand Prix,hungaroring
 silverstone,Silverstone Circuit,-1.01694,52.0786,Silverstone,UK,4,2020,British Grand Prix,silverstone
 catalunya,Circuit de Barcelona-Catalunya,2.26111,41.57,Montmeló,Spain,6,2020,Spanish Grand Prix,catalunya

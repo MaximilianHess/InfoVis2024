@@ -56,7 +56,7 @@ function render_tyre_plot() {
     // title
     svg.append("text")
         .attr("x", (width + margin.left + margin.right) / 2)
-        .attr("y", -(margin.top - 25))
+        .attr("y", -(margin.top - 30))
         .style("text-anchor", "middle")
         .style("font-size", "14px")
         .text("Tyre compound per lap");
@@ -119,7 +119,7 @@ function render_tyre_plot() {
         .attr("y", 0)
         .attr("dy", ".35em")
         .style("text-anchor", "start")
-        .style("font-size", "12px")
+        .style("font-size", "10px")
         .text(d => d);
 
     // Calculate the total width required for the legend

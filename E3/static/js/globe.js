@@ -7,7 +7,7 @@ let rotationAllowed = true;
 
 // global variables for connection
 window.selectedYear_global = 2020;
-window.selectedCircuit_global = "Austrian Grand Prix";
+window.selectedCircuit_global = "Styrian Grand Prix";
 
 
 // init function that is called by the backend at the start 

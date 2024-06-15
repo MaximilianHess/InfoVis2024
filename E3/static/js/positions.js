@@ -34,7 +34,7 @@ function render_pos_chart() {
     // title
     svg.append("text")
         .attr("x", (width + margin.left + margin.right) / 2)
-        .attr("y", -(margin.top - 25))
+        .attr("y", -(margin.top - 30))
         .style("text-anchor", "middle")
         .style("font-size", "14px")
         .text("Drivers' positions per lap");
@@ -123,7 +123,7 @@ function update_driver_pos_first_lap(year, round_number) {
                 })
                 .attr("stroke", d => d.color) // Set stroke color
                 .attr("stroke-width", 4) // Ensure consistent stroke width
-                .style("stroke-opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
+                .style("stroke-opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
                 .style("fill", "none")
                 .style("visibility", d => d.values[d.values.length -1].pos === 0 ? "hidden" : "visible"); // Hide line if first lap position is 0
 
@@ -155,7 +155,7 @@ function update_driver_pos_first_lap(year, round_number) {
                 })
                 .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
-                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
                 .style("stroke", "#636363")
                 .style("stroke-width", 0.2)
                 .style("visibility", d => d.pos === 0 ? "hidden" : "visible"); // Hide dot if first lap position is 0
@@ -165,7 +165,7 @@ function update_driver_pos_first_lap(year, round_number) {
                 .data(lap_data_dots)
                 .join("text")
                 .attr("class", "dot_labels")
-                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
                 .attr("x", function (d) { return x(d.lap) + 8; })
                 .attr("y", function (d) { return y(d.pos) + 4; })
                 .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
@@ -196,7 +196,7 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("stroke", d => d.color)
                 .attr("stroke-width", 4)
                 .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
-                .style("stroke-opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1);
+                .style("stroke-opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1);
 
             const lap_data_dots = lap_data.map(d => ({
                 color: d.color,
@@ -218,11 +218,9 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
                 .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
-                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
-                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
-                .style("stroke", "#636363")
-                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
-                .style("stroke-width", 0.2)
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")  // Hide dot if first lap position is 0
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")  // Hide dot if first lap position is 0
                 .on("mouseover", function (event, d) {
                     driver_tooltip
                         .style("left", `${x(d.lap)}px` - width - 100)
@@ -241,7 +239,7 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .join("text")
                 .attr("class", "dot_labels")
                 .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
-                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
                 .attr("x", function (d) { return x(d.lap) + 8; })
                 .attr("y", function (d) { return y(d.pos) + 4; })
                 .text(function (d) { return `${d.abbr}`; });

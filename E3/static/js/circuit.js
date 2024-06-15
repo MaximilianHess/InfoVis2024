@@ -190,15 +190,6 @@ function update_circuit() {
     x_scale.domain(d3.extent(filtered_circuit_data, function (d) { return d["x"] }))
     y_scale.domain(d3.extent(filtered_circuit_data, function (d) { return d["y"] }))
 
-    /*svg.select(".yAxis")
-        .call(d3.axisLeft(y_scale)
-            .tickSizeOuter(0))
-
-    svg.select(".xAxis")
-        .call(d3.axisBottom(x_scale)
-            .tickSizeOuter(0))*/
-
-
     line_circuit
         .datum(filtered_circuit_data)
         .attr("d", d3.line()
@@ -361,7 +352,6 @@ function update_lap(index) {
 
 
 function update_animation_lap(new_lap) {
-
 
     race_data.forEach((race, raceIndex) => {
         try {
