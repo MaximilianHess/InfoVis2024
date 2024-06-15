@@ -176,17 +176,7 @@ function update_tyre_plot(year, round_number, lap) {
             .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.Driver] ? 1 : 0.2) : 1)
             .style("stroke", "black")  // Border color
             .style("stroke-width", 0.3)
-            .on("mouseover", function (_, data) { // to do when the mouse hovers over
-                svg.selectAll("g.tick")
-                    .filter(function (d) { return d == data["Driver"] })
-                    .style("font-size", "130%")
-                    .classed("bold_tick", true)
-            })
-            .on("mouseout", function () {
-                d3.selectAll("g.tick.bold_tick")
-                    .style("font-size", "100%")
-                    .classed("bold_tick", false)
-            })
+            
         svg.selectAll("g.tick")
             .style("opacity", function (d) {
                 return window.anyHighlighted ? (window.highlightedDrivers[d] ? 1 : 0.2) : 1;

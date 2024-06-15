@@ -138,8 +138,6 @@ function set_circuit_from_globe(sel_year, sel_round) {
     const lap_slider = document.getElementById("lapSlider");
     lap_slider.value = 1
 
-    current_lap = 1
-    remove_highlights()
 
     const speed_slider = document.getElementById("speedSlider")
     speed_slider.value = -200
@@ -147,6 +145,10 @@ function set_circuit_from_globe(sel_year, sel_round) {
 
     selected_round = sel_round
     selected_year = sel_year
+
+
+    current_lap = 1
+    remove_highlights()
     update_circuit()
     update_race_data_and_race(selected_year, selected_round)
 }
@@ -336,8 +338,10 @@ function init_lap_counter_and_slider(rd) {
 }
 function update_lap(index) {
     function update(driver_index) {
+        console.log(current_lap);
         current_lap = race_data[driver_index]["lap"][index]["LapNumber"];
-
+        console.log(current_lap);
+        console.log(index);
 
         const lap_slider = document.getElementById("lapSlider");
         lap_slider.value = current_lap
