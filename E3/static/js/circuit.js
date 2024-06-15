@@ -247,10 +247,10 @@ function update_race(race_data) {
         .style("fill", d => `#${d.team_color}`)
         .on("mouseover", function (event, d) {
             // Calculate the tooltip position
-            const [x, y] = d3.pointer(event);
+            const bbox = this.getBoundingClientRect();
             driver_tooltip
-                .style("left", `${x + 70}px`)
-                .style("top", `${y + 50}px`)
+                .style("left", `${bbox.left + bbox.width / 2}px`) 
+                .style("top", `${bbox.top - 30}px`)              
                 .style("display", "block")
                 .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
         })

@@ -222,9 +222,10 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .style("visibility", d => d.pos === 0 ? "hidden" : "visible")  // Hide dot if first lap position is 0
                 .style("visibility", d => d.pos === 0 ? "hidden" : "visible")  // Hide dot if first lap position is 0
                 .on("mouseover", function (event, d) {
+                    const bbox = this.getBoundingClientRect();
                     driver_tooltip
-                        .style("left", `${x(d.lap)}px` - width - 100)
-                        .style("top", `${y(d.pos)}px`)
+                        .style("left", `${bbox.left + bbox.width / 2 + 30}px`) 
+                        .style("top", `${bbox.bottom}px`)              
                         .style("display", "block")
                         .html(`<span class="tooltip-bold">${d.first_name} ${d.last_name}</span><br>
                               <span class="tooltip-regular">${d.team_name} <br>
