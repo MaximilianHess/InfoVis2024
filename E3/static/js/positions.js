@@ -141,37 +141,44 @@ function update_driver_pos_first_lap(year, round_number) {
             // Remove existing dots
             svg.selectAll(".dots_line_plot").remove();
 
+            lap_data.forEach(d => d.highlighted = window.highlightedDrivers[d.abbr] || false);
+
             // Append new dots
-            svg.selectAll(".dots_line_plot")
-                .data(lap_data_dots)
-                .enter()
-                .append("circle")
-                .attr("class", "dots_line_plot")
-                .attr("cx", function (d) {
-                    return x(d.lap); // Set the x position of the cycle marker
-                })
-                .attr("cy", function (d) {
-                    return y(d.pos); // Set the y position of the cycle marker
-                })
-                .attr("r", 5) // Set the radius of the cycle marker
-                .style("fill", d => d.color)
-                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
-                .style("stroke", "#636363")
-                .style("stroke-width", 0.2)
-                .style("visibility", d => d.pos === 0 ? "hidden" : "visible") // Hide dot if first lap position is 0
-                .on("mouseover", function (event, d) {
-                    const bbox = this.getBoundingClientRect();
-                    driver_tooltip
-                        .style("left", `${bbox.left + bbox.width / 2 + 30}px`) 
-                        .style("top", `${bbox.bottom - 30}px`)              
-                        .style("display", "block")
-                        .html(`<span class="tooltip-bold">${d.first_name} ${d.last_name}</span><br>
-                              <span class="tooltip-regular">${d.team_name} <br>
-                              Current Position: ${d.pos}</span>`);
-                })
-                .on("mouseout", function () {
-                    driver_tooltip.style("display", "none");
-                });
+            let dots_line_plot = svg.selectAll(".dots_line_plot")
+                    .data(lap_data_dots)
+                    .enter()
+                    .append("circle")
+                    .attr("class", "dots_line_plot")
+                    .attr("cx", d => x(d.lap))
+                    .attr("cy", d => y(d.pos))
+                    .attr("r", 5)
+                    .style("fill", d => d.color)
+                    .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
+                    .style("stroke", "#636363")
+                    .style("stroke-width", 0.2)
+                    .style("visibility", d => d.pos === 0 ? "hidden" : "visible")
+                    .on("mouseover", function (event, d) {
+                        const bbox = this.getBoundingClientRect();
+                        driver_tooltip
+                            .style("left", `${bbox.left + bbox.width / 2 + 30}px`)
+                            .style("top", `${bbox.bottom - 30}px`)
+                            .style("display", "block")
+                            .html(`<span class="tooltip-bold">${d.first_name} ${d.last_name}</span><br>
+                                <span class="tooltip-regular">${d.team_name} <br>
+                                Current Position: ${d.pos}</span>`);
+                    })
+                    .on("mouseout", function () {
+                        driver_tooltip.style("display", "none");
+                    })
+                    .on("mousedown", function (event, d) {
+                        d.highlighted = !d.highlighted;
+                        window.highlightedDrivers[d.abbr] = d.highlighted;
+                        window.anyHighlighted = lap_data.some(driver => driver.highlighted);
+                        dots_line_plot.style("opacity", driver => driver.highlighted || !window.anyHighlighted ? 1 : 0.3);
+
+                        update_tyre_plot(selected_year, selected_round, current_lap);
+                    });
+                
 
 
             svg.selectAll(".dot_labels")

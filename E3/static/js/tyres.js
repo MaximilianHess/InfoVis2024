@@ -2,7 +2,7 @@ export { init_tyre_plot, update_tyre_plot, update_tyre_plot_first_lap, adjust_x_
 
 var margin = { top: 40, right: 50, bottom: 40, left: 70 }
 var width = window.innerWidth / 2;
-var height = window.innerHeight / 2 - 125;
+var height = window.innerHeight / 2 - 100;
 
 const default_year = 2020
 const default_round = 1
@@ -173,13 +173,13 @@ function update_tyre_plot(year, round_number, lap) {
             .attr("rx", 2)
             .attr("ry", 2)
             .style("fill", function (d) { return compound_colors[d["compound"]] }) // fill the rectangles based on the value according to the color scale
-            .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.Driver] ? 1 : 0.3) : 1)
+            .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.Driver] ? 1 : 0.2) : 1)
             .style("stroke", "black")  // Border color
             .style("stroke-width", 0.3)
             
         svg.selectAll("g.tick")
             .style("opacity", function (d) {
-                return window.anyHighlighted ? (window.highlightedDrivers[d] ? 1 : 0.3) : 1;
+                return window.anyHighlighted ? (window.highlightedDrivers[d] ? 1 : 0.2) : 1;
             });
     });
 }
@@ -242,7 +242,7 @@ function update_tyre_plot_first_lap(year, round_number) {
             .attr("rx", 2)
             .attr("ry", 2)
             .style("fill", function (d) { return compound_colors[d["compound"]] }) // fill the rectangles based on the value according to the color scale
-            .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.Driver] ? 1 : 0.3) : 1)
+            .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.Driver] ? 1 : 0.2) : 1)
             .style("stroke", "#636363")
             .style("stroke-width", 1)
             .on("mouseover", function (_, data) { // to do when the mouse hovers over

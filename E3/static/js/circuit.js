@@ -2,7 +2,7 @@ export { init_circuit, update_race_data_and_race, set_circuit_from_globe, stop_r
 import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot } from "./positions.js";
 import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot } from "./tyres.js";
 
-// Global Variables
+// global Variables
 var driver_dots, x_scale, y_scale, race_interval, line_circuit, svg, width, height, race_data, total_laps, driver_labels
 var global_index = 0
 var race_restart = false
@@ -40,32 +40,14 @@ function render_circuit() {
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")")
 
-
-
     x_scale = d3.scaleLinear()
         .domain(d3.extent(circuit_data, function (d) { return d["x"] }))
         .range([0, width])
-
-
-    // append the x axis
-    /*svg.append("g")
-        .attr("class", "xAxis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x_scale)
-            .tickSizeOuter(0)
-            .tickFormat(d3.format("d")) // format the years stores as integers to show like "2,000" -> "2000"
-        )
-*/
 
     y_scale = d3.scaleLinear()
         .domain(d3.extent(circuit_data, function (d) { return d["y"] }))
         .range([height, 0])
 
-    // append y axis
-    /*svg.append("g")
-        .attr("class", "yAxis")
-        .call(d3.axisLeft(y_scale)
-            .tickSizeOuter(0))*/
 
     line_circuit = svg
         .append("g")
@@ -271,7 +253,9 @@ function update_race(race_data) {
 
             const label = d3.select(`#label-${d.abbreviation}`);
             if (d.highlighted) {
-                label.style("display", "block");
+                label.style("display", "block")
+                      .style("font-family", "'Formula1-Bold', sans-serif") 
+
             } else {
                 label.style("display", "none");
             }
@@ -380,7 +364,6 @@ function update_lap(index) {
     update(current_leader);
 
 }
-
 
 function update_animation_lap(new_lap) {
 

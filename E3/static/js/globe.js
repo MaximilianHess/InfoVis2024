@@ -27,7 +27,7 @@ let GLOBE_WIDTH = window.innerWidth;
 let GLOBE_HEIGHT = window.innerHeight;
 let GLOBE_RADIUS = 400;
 let GLOBE_CENTER = [GLOBE_WIDTH / 2, GLOBE_HEIGHT / 2];
-let TILT = 45;
+let TILT = 30;
 const DOT_RADIUS = 5;
 
 // interaction
@@ -254,8 +254,7 @@ function render_globe(globe_data, circuit_geo_data) {
     
     // modified template: https://observablehq.com/@d3/world-tour?intent=fork
     async function worldTour(circuit_geo_data, projection) {
-
-        const tilt = 20;
+        const tilt = 10; // different tilt for the rotation
         const duration = 1750; 
     
         for (let i = 0; i < circuit_geo_data.length - 1; i++) {
