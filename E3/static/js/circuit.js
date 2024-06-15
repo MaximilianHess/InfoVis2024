@@ -4,7 +4,6 @@ import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot }
 
 // global Variables
 var driver_dots, x_scale, y_scale, race_interval, line_circuit, svg, width, race_data, height, total_laps, driver_labels
-window.race_data = race_data
 var global_index = 0
 var race_restart = false
 var selected_round = 2
