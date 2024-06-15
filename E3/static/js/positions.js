@@ -103,15 +103,7 @@ function update_driver_pos_first_lap(year, round_number) {
 
             lap_data = Object.values(lap_data)
 
-            /*svg.append("defs").append("filter")
-                .attr("id", "line-shadow") 
-                .append("feDropShadow")
-                .attr("dx", 0)
-                .attr("dy", 0)
-                .attr("stdDeviation", 0.5) 
-                .attr("flood-color", "black")
-                .attr("flood-opacity", 1); */
-
+    
             svg.selectAll(".line")
                 .data(lap_data)
                 .enter()
@@ -127,7 +119,6 @@ function update_driver_pos_first_lap(year, round_number) {
                 .style("stroke-opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
                 .attr("stroke-width", 4)
                 .style("fill", "none");
-                //.style("filter", "url(#line-shadow)");
 
 
             const lap_data_dots = lap_data.map(d => {
@@ -165,14 +156,6 @@ function update_driver_pos_chart(year, round_number, lap) {
         .then(function (lap_data) {
             lap_data = Object.values(lap_data)
 
-            svg.append("defs").append("filter")
-            .attr("id", "line-shadow")
-            .append("feDropShadow")
-            .attr("dx", 0)
-            .attr("dy", 0)
-            .attr("stdDeviation", 0.5) 
-            .attr("flood-color", "black") 
-            .attr("flood-opacity", 1);
 
             svg.selectAll(".line")
                 .data(lap_data)
@@ -185,7 +168,6 @@ function update_driver_pos_chart(year, round_number, lap) {
                 .attr("stroke", d => d.color)
                 .attr("stroke-width", 4)
                 .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
-               .style("filter", "url(#line-shadow)")
                 ;
 
 
