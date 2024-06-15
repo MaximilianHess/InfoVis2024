@@ -1,6 +1,6 @@
 // exports and imports for the module
 export { init_globe };
-import { set_circuit_from_globe } from "./circuit.js";
+import { set_circuit_from_globe, stop_race} from "./circuit.js";
 
 // global variable to track rotation permission
 let rotationAllowed = true;
@@ -377,6 +377,7 @@ function showRacePage() {
     
     // Function to switch to the start page
     function showStartPage() {
+    stop_race()
     document.getElementById('race_page').style.display = 'none';
     document.getElementById('start_page').style.display = 'flex';
     }

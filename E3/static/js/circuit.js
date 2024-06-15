@@ -1,4 +1,4 @@
-export { init_circuit, update_race_data_and_race, set_circuit_from_globe }
+export { init_circuit, update_race_data_and_race, set_circuit_from_globe, stop_race }
 import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot } from "./positions.js";
 import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot } from "./tyres.js";
 
@@ -8,7 +8,7 @@ var global_index = 0
 var race_restart = false
 var selected_round = 1
 var selected_year = 2020
-var max_width_or_height = window.innerHeight/1.4;
+var max_width_or_height = window.innerHeight / 1.4;
 var animation_speed = 270
 var global_circuit_data
 var current_lap = 1
@@ -21,7 +21,6 @@ function init_circuit(circuit_data) {
     update_driver_pos_first_lap(selected_year, selected_round)
     calculate_width_and_height(circuit_data)
     render_circuit()
-    set_circuit(circuit_data)
 }
 
 var margin = { top: 50, right: 50, bottom: 50, left: 50 }
@@ -82,11 +81,11 @@ function render_circuit() {
 
     // append the title
     svg.append("text")
-    .attr("x", width / 2) // centered horizontally
-    .attr("y", -30)
-    .style("text-anchor", "middle")
-    .style("font-size", "16px")
-    .html(`<tspan class="tooltip-bold">${window.selectedCircuit_global}</tspan> <tspan class="tooltip-bold">${window.selectedYear_global}</tspan>`);
+        .attr("x", width / 2) // centered horizontally
+        .attr("y", -30)
+        .style("text-anchor", "middle")
+        .style("font-size", "16px")
+        .html(`<tspan class="tooltip-bold">${window.selectedCircuit_global}</tspan> <tspan class="tooltip-bold">${window.selectedYear_global}</tspan>`);
 
     // TODO: This button has to be redone for the final design
     d3.select("#start_race").on("click", start_race)
@@ -101,7 +100,7 @@ function start_race() {
     stop_race()
 
     const lap_slider = document.getElementById("lapSlider");
-    lap_slider.value = 1    
+    lap_slider.value = 1
 
     const speed_slider = document.getElementById("speedSlider")
     speed_slider.value = -270
@@ -154,25 +153,19 @@ function animate_race(index) {
 }
 
 function set_circuit_from_globe(sel_year, sel_round) {
+    const lap_slider = document.getElementById("lapSlider");
+    lap_slider.value = 1
+
+    const speed_slider = document.getElementById("speedSlider")
+    speed_slider.value = -270
+    animation_speed = 270
+
     selected_round = sel_round
     selected_year = sel_year
     update_circuit()
     update_race_data_and_race(selected_year, selected_round)
 }
 
-function set_circuit() {
-    d3.select("#selectCircuit").on("change", function (d) {
-        selected_round = d3.select(this).property("value")
-        update_circuit()
-        update_race_data_and_race(selected_year, selected_round)
-    })
-
-    d3.select("#select_year").on("change", function (d) {
-        selected_year = d3.select(this).property("value")
-        update_circuit()
-        update_race_data_and_race(selected_year, selected_round)
-    })
-}
 
 function update_circuit() {
     var filtered_circuit_data = global_circuit_data.filter(function (d) {
@@ -251,36 +244,36 @@ function update_race(race_data) {
 
     race_data.forEach(d => d.highlighted = window.highlightedDrivers[d.abbreviation] || false);
 
-  driver_dots = svg.selectAll("circle")
-    .data(race_data)
-    .enter()
-    .append("circle")
-    .attr("stroke", "white")
-    .attr("stroke-width", 0.5)
-    .attr("cx", d => x_scale(d.positions[0].x))
-    .attr("cy", d => y_scale(d.positions[0].y))
-    .attr("r", 7)
-    .style("fill", d => `#${d.team_color}`)
-    .on("mouseover", function(event, d) {
-        // Calculate the tooltip position
-        const [x, y] = d3.pointer(event);
-        driver_tooltip
-            .style("left", `${x + 70}px`)
-            .style("top", `${y + 50}px`)  
-            .style("display", "block")
-            .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
-    })
-    .on("mouseout", function() {
-        driver_tooltip.style("display", "none");
-    })
-    .on("mousedown", function(event, d) {
-        d.highlighted = !d.highlighted;
-        window.highlightedDrivers[d.abbreviation] = d.highlighted;
-        window.anyHighlighted = race_data.some(driver => driver.highlighted);
-        driver_dots.style("opacity", driver => driver.highlighted || !window.anyHighlighted ? 1 : 0.3);
-        update_driver_pos_chart(selected_year, selected_round, current_lap);
-        update_tyre_plot(selected_year, selected_round, current_lap)
-    });
+    driver_dots = svg.selectAll("circle")
+        .data(race_data)
+        .enter()
+        .append("circle")
+        .attr("stroke", "white")
+        .attr("stroke-width", 0.5)
+        .attr("cx", d => x_scale(d.positions[0].x))
+        .attr("cy", d => y_scale(d.positions[0].y))
+        .attr("r", 7)
+        .style("fill", d => `#${d.team_color}`)
+        .on("mouseover", function (event, d) {
+            // Calculate the tooltip position
+            const [x, y] = d3.pointer(event);
+            driver_tooltip
+                .style("left", `${x + 70}px`)
+                .style("top", `${y + 50}px`)
+                .style("display", "block")
+                .html(`<span class="tooltip-bold"></span> ${d.abbreviation}`);
+        })
+        .on("mouseout", function () {
+            driver_tooltip.style("display", "none");
+        })
+        .on("mousedown", function (event, d) {
+            d.highlighted = !d.highlighted;
+            window.highlightedDrivers[d.abbreviation] = d.highlighted;
+            window.anyHighlighted = race_data.some(driver => driver.highlighted);
+            driver_dots.style("opacity", driver => driver.highlighted || !window.anyHighlighted ? 1 : 0.3);
+            update_driver_pos_chart(selected_year, selected_round, current_lap);
+            update_tyre_plot(selected_year, selected_round, current_lap)
+        });
 }
 
 
@@ -325,6 +318,8 @@ function init_lap_counter_and_slider(rd) {
         .on("input", function () {
             stop_race()
             update_animation_lap(this.value)
+        })
+        .on("change",function(){
             resume_race()
         })
 
@@ -332,17 +327,18 @@ function init_lap_counter_and_slider(rd) {
         .on("input", function () {
             stop_race()
             animation_speed = -this.value;
+        })
+        .on("change",function(){
             resume_race()
         })
 }
 function update_lap(index) {
     function update(driver_index) {
-        current_leader = driver_index;
         current_lap = race_data[driver_index]["lap"][index]["LapNumber"];
 
 
-    const lap_slider = document.getElementById("lapSlider");
-    lap_slider.value = current_lap    
+        const lap_slider = document.getElementById("lapSlider");
+        lap_slider.value = current_lap
 
 
         d3.select("#lap_display").text(`Lap ${current_lap}/${total_laps}`);
@@ -350,20 +346,17 @@ function update_lap(index) {
         update_tyre_plot(selected_year, selected_round, current_lap)
     }
 
-    function get_leading_driver() {
-        for (let i = 0; i < race_data.length; i++) {
-            if (race_data[i]["pos"][index]["Position"] == 1) {
-                return i;
-            }
+
+
+    race_data.forEach((race, raceIndex) => {
+        const temp_index = race.lap.findIndex(lap => lap.LapNumber == current_lap + 1);
+        if (temp_index != -1 && race.pos[temp_index].Position == 1) {
+            global_index = temp_index;
+            current_leader = raceIndex;
         }
-        return -1; // Falls kein führender Fahrer gefunden wird
-    }
+    })
+    update(current_leader);
 
-    let leading_driver_index = get_leading_driver();
-
-    if (leading_driver_index !== -1 && race_data[leading_driver_index]["lap"][index]["LapNumber"] != current_lap) {
-        update(leading_driver_index);
-    }
 }
 
 
@@ -385,6 +378,9 @@ function update_animation_lap(new_lap) {
             }
         }
     });
+    d3.select("#lap_display").text(`Lap ${new_lap}/${total_laps}`);
+    update_driver_pos_chart(selected_year, selected_round, new_lap);
+    update_tyre_plot(selected_year, selected_round, new_lap)    
 
 }
 

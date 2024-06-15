@@ -99,7 +99,7 @@ function update_driver_pos_first_lap(year, round_number) {
     d3.json(`/get_lap_data/${year}/${round_number}/${1}`)
         .then(function (lap_data) {
 
-
+            
             lap_data = Object.values(lap_data);
 
             // Remove existing paths with the line class
