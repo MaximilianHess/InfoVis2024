@@ -1,9 +1,10 @@
-export { init_circuit, update_race_data_and_race, set_circuit_from_globe, stop_race }
+export { init_circuit, update_race_data_and_race, set_circuit_from_globe, stop_race, update_race }
 import { update_driver_pos_chart, update_driver_pos_first_lap, adjust_x_axis_pos_plot } from "./positions.js";
 import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot } from "./tyres.js";
 
 // global Variables
-var driver_dots, x_scale, y_scale, race_interval, line_circuit, svg, width, height, race_data, total_laps, driver_labels
+var driver_dots, x_scale, y_scale, race_interval, line_circuit, svg, width, race_data, height, total_laps, driver_labels
+window.race_data = race_data
 var global_index = 0
 var race_restart = false
 var selected_round = 2

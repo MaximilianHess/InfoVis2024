@@ -1,4 +1,5 @@
 export { update_driver_pos_chart, init_pos_plot, update_driver_pos_first_lap, adjust_x_axis_pos_plot }
+import { update_race } from "./circuit.js";
 
 var y
 var x
@@ -154,8 +155,6 @@ function update_driver_pos_first_lap(year, round_number) {
                     .attr("r", 5)
                     .style("fill", d => d.color)
                     .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
-                    .style("stroke", "#636363")
-                    .style("stroke-width", 0.2)
                     .style("visibility", d => d.pos === 0 ? "hidden" : "visible")
                     .on("mouseover", function (event, d) {
                         const bbox = this.getBoundingClientRect();
@@ -169,14 +168,6 @@ function update_driver_pos_first_lap(year, round_number) {
                     })
                     .on("mouseout", function () {
                         driver_tooltip.style("display", "none");
-                    })
-                    .on("mousedown", function (event, d) {
-                        d.highlighted = !d.highlighted;
-                        window.highlightedDrivers[d.abbr] = d.highlighted;
-                        window.anyHighlighted = lap_data.some(driver => driver.highlighted);
-                        dots_line_plot.style("opacity", driver => driver.highlighted || !window.anyHighlighted ? 1 : 0.3);
-
-                        update_tyre_plot(selected_year, selected_round, current_lap);
                     });
                 
 
