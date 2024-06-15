@@ -160,7 +160,7 @@ function update_tyre_plot_first_lap(year, round_number) {
             all_drivers.add(item.Driver);
         });
 
-        all_drivers = Array.from(all_drivers).sort();
+        all_drivers = Array.from(all_drivers).sort().reverse();
 
 
         // Select the SVG element
