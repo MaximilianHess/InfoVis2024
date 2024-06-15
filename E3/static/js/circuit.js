@@ -6,10 +6,10 @@ import { update_tyre_plot, update_tyre_plot_first_lap, adjust_x_axis_tyre_plot }
 var driver_dots, x_scale, y_scale, race_interval, line_circuit, svg, width, height, race_data, total_laps, last_index
 var global_index = 0
 var race_restart = false
-var selected_round = 1
+var selected_round = 2  
 var selected_year = 2020
 var max_width_or_height = window.innerHeight / 1.4;
-var animation_speed = 270
+var animation_speed = 200
 var global_circuit_data
 var current_lap = 1
 var current_leader = 1
@@ -103,8 +103,8 @@ function start_race() {
     lap_slider.value = 1
 
     const speed_slider = document.getElementById("speedSlider")
-    speed_slider.value = -270
-    animation_speed = 270
+    speed_slider.value = -200
+    animation_speed = 200
 
     init_lap_counter_and_slider(race_data)
     driver_dots
@@ -157,8 +157,8 @@ function set_circuit_from_globe(sel_year, sel_round) {
     lap_slider.value = 1
 
     const speed_slider = document.getElementById("speedSlider")
-    speed_slider.value = -270
-    animation_speed = 270
+    speed_slider.value = -200
+    animation_speed = 200
 
     selected_round = sel_round
     selected_year = sel_year
@@ -180,7 +180,7 @@ function update_circuit() {
     lap_slider.max = total_laps
 
     const speed_slider = document.getElementById("speedSlider")
-    speed_slider.value = -270
+    speed_slider.value = -200
 
     global_index = 0
 
