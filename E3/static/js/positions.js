@@ -7,7 +7,7 @@ var line
 
 var margin = { top: 40, right: 50, bottom: 40, left: 70 }
 var width = window.innerWidth / 2;
-var height = window.innerHeight / 2 - 100;
+var height = window.innerHeight / 2 - 125;
 
 function init_pos_plot() {
     render_pos_chart()

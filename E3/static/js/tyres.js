@@ -2,7 +2,7 @@ export { init_tyre_plot, update_tyre_plot, update_tyre_plot_first_lap, adjust_x_
 
 var margin = { top: 40, right: 50, bottom: 40, left: 70 }
 var width = window.innerWidth / 2;
-var height = window.innerHeight / 2 - 100;
+var height = window.innerHeight / 2 - 125;
 
 const default_year = 2020
 const default_round = 1

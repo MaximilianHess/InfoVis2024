@@ -210,7 +210,7 @@ body {
 #circuit_container{
   width: 50%;
   margin-top: 20px;
-  height: 100vh;
+  height: auto;
   box-sizing: border-box;
   z-index: -1;
 }
