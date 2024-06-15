@@ -199,6 +199,7 @@ function update_driver_pos_chart(year, round_number, lap) {
                 };
             });
 
+            lap_data_dots.forEach(d => d.highlighted = window.highlightedDrivers[d.abbreviation] || false);
 
             svg.selectAll(".dots_line_plot")
                 .data(lap_data_dots)
@@ -218,8 +219,8 @@ function update_driver_pos_chart(year, round_number, lap) {
                 })
                 .on("mouseout", function () {
                     driver_tooltip.style("display", "none");
-
-                });
+                })
+                ;
 
             svg.selectAll(".dot_labels")
             .data(lap_data_dots)

@@ -60,7 +60,7 @@ function render_tyre_plot() {
     // title
     svg.append("text")
     .attr("x", (width + margin.left + margin.right) / 2)
-    .attr("y", -(margin.top - 40)) 
+    .attr("y", -(margin.top - 25)) 
     .style("text-anchor", "middle")
     .style("font-size", "14px")
     .text("Tyre compound per lap");
@@ -115,29 +115,32 @@ function update_tyre_plot(year, round_number, lap) {
             .data(tyre_data)
             .enter()
             .append("rect")
-            .attr("x", function (d) { return x(d["first_lap_stint"]) }) // x axis with the team names
-            .attr("y", function (d) { return y(d["Driver"]) })    // y axis with the metrics
+            .attr("x", function (d) { return x(d["first_lap_stint"]) }) 
+            .attr("y", function (d) { return y(d["Driver"]) })   
             .attr("width", d => x(d["last_lap_stint"] + 1) - x(d["first_lap_stint"]))
             .attr("height", y.bandwidth())
             .attr("class", "square")
             .attr("rx", 2)
             .attr("ry", 2)
             .style("fill", function (d) { return compound_colors[d["compound"]] }) // fill the rectangles based on the value according to the color scale
+            .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.Driver] ? 1 : 0.3) : 1)
             .style("stroke", "black")  // Border color
             .style("stroke-width", 0.3)
             .on("mouseover", function (_, data) { // to do when the mouse hovers over
                 svg.selectAll("g.tick")
                     .filter(function (d) { return d == data["Driver"] })
-                    .style("font-weight", "bolder")
                     .style("font-size", "130%")
                     .classed("bold_tick", true)
             })
             .on("mouseout", function () {
                 d3.selectAll("g.tick.bold_tick")
-                    .style("font-weight", "normal")
                     .style("font-size", "100%")
                     .classed("bold_tick", false)
             })
+            svg.selectAll("g.tick")
+                .style("opacity", function(d) {
+                    return window.anyHighlighted ? (window.highlightedDrivers[d] ? 1 : 0.3) : 1;
+                });
     });
 }
 
@@ -191,21 +194,22 @@ function update_tyre_plot_first_lap(year, round_number) {
             .data(tyre_data)
             .enter()
             .append("rect")
-            .attr("x", function (d) { return x(d["first_lap_stint"]) }) // x axis with the team names
-            .attr("y", function (d) { return y(d["Driver"]) })    // y axis with the metrics
+            .attr("x", function (d) { return x(d["first_lap_stint"]) }) 
+            .attr("y", function (d) { return y(d["Driver"]) })   
             .attr("width", d => x(d["last_lap_stint"] + 0.5) - x(d["first_lap_stint"]))
             .attr("height", y.bandwidth())
             .attr("class", "square")
             .attr("rx", 2)
             .attr("ry", 2)
             .style("fill", function (d) { return compound_colors[d["compound"]] }) // fill the rectangles based on the value according to the color scale
+            .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.Driver] ? 1 : 0.3) : 1)
             .style("stroke", "#636363")  
             .style("stroke-width", 1)
             .on("mouseover", function (_, data) { // to do when the mouse hovers over
                 svg.selectAll("g.tick")
                     .filter(function (d) { return d == data["Driver"] })
                     .style("font-weight", "bolder")
-                    .style("font-size", "110%")
+                    .style("font-size", "130%")
                     .classed("bold_tick", true)
             })
             .on("mouseout", function () {

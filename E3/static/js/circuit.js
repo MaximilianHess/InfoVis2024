@@ -92,6 +92,8 @@ function render_circuit() {
     d3.select("#start_race").on("click", start_race)
     d3.select("#stop_race").on("click", stop_race)
     d3.select("#resume_race").on("click", resume_race)
+    d3.select("#remove_highlights").on("click", remove_highlights)
+
 }
 
 
@@ -228,6 +230,15 @@ function update_race_data_and_race(selected_year, selected_round) {
 window.highlightedDrivers = {};
 window.anyHighlighted = false;
 
+function remove_highlights() {
+    window.highlightedDrivers = {};
+    window.anyHighlighted = false;
+    race_data.forEach(driver => driver.highlighted = false);
+    driver_dots.style("opacity", 1);
+    update_driver_pos_chart(selected_year, selected_round, current_lap);
+    update_tyre_plot(selected_year, selected_round, current_lap)
+}
+
 // driver tooltip
 const driver_tooltip = d3.select("body")
     .append("div")
@@ -267,7 +278,8 @@ function update_race(race_data) {
         window.highlightedDrivers[d.abbreviation] = d.highlighted;
         window.anyHighlighted = race_data.some(driver => driver.highlighted);
         driver_dots.style("opacity", driver => driver.highlighted || !window.anyHighlighted ? 1 : 0.3);
-        update_driver_pos_chart(selected_year, selected_round, current_lap); // call to update the position plot
+        update_driver_pos_chart(selected_year, selected_round, current_lap);
+        update_tyre_plot(selected_year, selected_round, current_lap)
     });
 }
 
