@@ -6,8 +6,8 @@ var svg
 var line
 
 var margin = { top: 40, right: 50, bottom: 40, left: 70 }
-var width = window.innerWidth/2 ;
-var height = window.innerHeight/2 - 100;
+var width = window.innerWidth / 2;
+var height = window.innerHeight / 2 - 100;
 
 function init_pos_plot() {
     render_pos_chart()
@@ -30,28 +30,28 @@ function render_pos_chart() {
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")")
-    
+
     // title
     svg.append("text")
-            .attr("x", (width + margin.left + margin.right) / 2)
-            .attr("y", -(margin.top - 25)) 
-            .style("text-anchor", "middle")
-            .style("font-size", "14px")
-            .text("Drivers' positions per lap");
-    
+        .attr("x", (width + margin.left + margin.right) / 2)
+        .attr("y", -(margin.top - 25))
+        .style("text-anchor", "middle")
+        .style("font-size", "14px")
+        .text("Drivers' positions per lap");
+
     // x axis label
     svg.append("text")
-            .attr("x", (width + margin.left + margin.right) / 2)
-            .attr("y",  height + 35) 
-            .style("text-anchor", "middle")
-            .style("font-size", "10px")
-            .text("Lap number");
+        .attr("x", (width + margin.left + margin.right) / 2)
+        .attr("y", height + 35)
+        .style("text-anchor", "middle")
+        .style("font-size", "10px")
+        .text("Lap number");
 
     // y axis label
     svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("x", -(height / 2)) 
-        .attr("y", -margin.left + 20) 
+        .attr("x", -(height / 2))
+        .attr("y", -margin.left + 20)
         .style("text-anchor", "middle")
         .style("font-size", "10px")
         .text("Position");
@@ -99,102 +99,133 @@ function update_driver_pos_first_lap(year, round_number) {
     d3.json(`/get_lap_data/${year}/${round_number}/${1}`)
         .then(function (lap_data) {
 
-            update_driver_pos_chart(year, round_number, 1)
 
-            lap_data = Object.values(lap_data)
+            lap_data = Object.values(lap_data);
 
-    
+            // Remove existing paths with the line class
+            svg.selectAll(".line").remove();
+
+            // Append new paths
             svg.selectAll(".line")
                 .data(lap_data)
                 .enter()
                 .append("path")
                 .attr("class", "line")
                 .attr("d", function (d) {
+                    let values = d.values;
+                    if (values[0].pos === 0) {
+                        values = values.slice(1); // Skip the first lap if position is 0
+                    }
                     // Generate the line path string
                     return d3.line()
                         .x(function (d) { return x(d.lap); }) // Access the lap value
-                        .y(function (d) { return y(d.pos); })(d.values); // Access the position value
+                        .y(function (d) { return y(d.pos); })(values); // Access the position value
                 })
-                .attr("fill", d => d.color) // Set stroke color
+                .attr("stroke", d => d.color) // Set stroke color
+                .attr("stroke-width", 4) // Ensure consistent stroke width
                 .style("stroke-opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
-                .attr("stroke-width", 4)
-                .style("fill", "none");
+                .style("fill", "none")
+                .style("visibility", d => d.values[d.values.length -1].pos === 0 ? "hidden" : "visible"); // Hide line if first lap position is 0
 
+            // Map the data for dots
+            const lap_data_dots = lap_data.map(d => ({
+                color: d.color,
+                lap: d.values[d.values.length - 1].lap,
+                pos: d.values[d.values.length - 1].pos,
+                first_name: d.first_name,
+                last_name: d.last_name,
+                team_name: d.team_name,
+                abbr: d.abbr,
+            }));
 
-            const lap_data_dots = lap_data.map(d => {
-                return {
-                    color: d.color,
-                    lap: d.values[d.values.length - 1].lap,
-                    pos: d.values[d.values.length - 1].pos,
-                    first_name: d.first_name,
-                    last_name: d.last_name,
-                    team_name: d.team_name,
-                    abbr: d.abbr
-                };
-            });
+            // Remove existing dots
+            svg.selectAll(".dots_line_plot").remove();
 
-
+            // Append new dots
             svg.selectAll(".dots_line_plot")
                 .data(lap_data_dots)
                 .enter()
                 .append("circle")
                 .attr("class", "dots_line_plot")
-                .attr("cx", function (d) { return x(d.lap); }) // Set the x position of the cycle marker
-                .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
+                .attr("cx", function (d) {
+                    return x(d.lap); // Set the x position of the cycle marker
+                })
+                .attr("cy", function (d) {
+                    return y(d.pos); // Set the y position of the cycle marker
+                })
                 .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
                 .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
                 .style("stroke", "#636363")
                 .style("stroke-width", 0.2)
-        })
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible"); // Hide dot if first lap position is 0
 
+
+            svg.selectAll(".dot_labels")
+                .data(lap_data_dots)
+                .join("text")
+                .attr("class", "dot_labels")
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
+                .attr("x", function (d) { return x(d.lap) + 8; })
+                .attr("y", function (d) { return y(d.pos) + 4; })
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
+                .text(function (d) { return `${d.abbr}`; });
+        });
 }
 
 
 function update_driver_pos_chart(year, round_number, lap) {
     d3.json(`/get_lap_data/${year}/${round_number}/${lap}`)
         .then(function (lap_data) {
-            lap_data = Object.values(lap_data)
-
+            lap_data = Object.values(lap_data);
 
             svg.selectAll(".line")
                 .data(lap_data)
+                .join("path")
+                .attr("class", "line")
                 .attr("d", function (d) {
+                    let values = d.values;
+                    if (values[0].pos === 0) {
+                        values = values.slice(1); // Skip the first lap if position is 0
+                    }
                     // Generate the line path string
                     return d3.line()
                         .x(function (d) { return x(d.lap); }) // Access the lap value
-                        .y(function (d) { return y(d.pos); })(d.values); // Access the position value
+                        .y(function (d) { return y(d.pos); })(values); // Access the position value
                 })
                 .attr("stroke", d => d.color)
                 .attr("stroke-width", 4)
-                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
-                ;
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
+                .style("stroke-opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1);
 
+            const lap_data_dots = lap_data.map(d => ({
+                color: d.color,
+                lap: d.values[d.values.length - 1].lap,
+                pos: d.values[d.values.length - 1].pos,
+                first_name: d.first_name,
+                last_name: d.last_name,
+                team_name: d.team_name,
+                abbr: d.abbr,
+            }));
 
-            const lap_data_dots = lap_data.map(d => {
-                return {
-                    color: d.color,
-                    lap: d.values[d.values.length - 1].lap,
-                    pos: d.values[d.values.length - 1].pos,
-                    first_name: d.first_name,
-                    last_name: d.last_name,
-                    team_name: d.team_name,
-                    abbr: d.abbr
-                };
-            });
-
-            lap_data_dots.forEach(d => d.highlighted = window.highlightedDrivers[d.abbreviation] || false);
+            lap_data_dots.forEach(d => d.highlighted = window.highlightedDrivers[d.abbr] || false);
 
             svg.selectAll(".dots_line_plot")
                 .data(lap_data_dots)
+                .join("circle")
+                .attr("class", "dots_line_plot")
                 .attr("cx", function (d) { return x(d.lap); }) // Set the x position of the cycle marker
                 .attr("cy", function (d) { return y(d.pos); }) // Set the y position of the cycle marker
+                .attr("r", 5) // Set the radius of the cycle marker
                 .style("fill", d => d.color)
                 .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
+                .style("stroke", "#636363")
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
+                .style("stroke-width", 0.2)
                 .on("mouseover", function (event, d) {
-
                     driver_tooltip
-                        .style("left", `${x(d.lap)}px`- width - 100)
+                        .style("left", `${x(d.lap)}px` - width - 100)
                         .style("top", `${y(d.pos)}px`)
                         .style("display", "block")
                         .html(`<span class="tooltip-bold">${d.first_name} ${d.last_name}</span><br>
@@ -203,18 +234,18 @@ function update_driver_pos_chart(year, round_number, lap) {
                 })
                 .on("mouseout", function () {
                     driver_tooltip.style("display", "none");
-                })
-                ;
+                });
 
             svg.selectAll(".dot_labels")
-            .data(lap_data_dots)
-            .join("text") 
-            .attr("class", "dot_labels")
-            .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
-            .attr("x", function(d) { return x(d.lap) + 8; }) 
-            .attr("y", function(d) { return y(d.pos) + 4; }) 
-            .text(function(d) { return `${d.abbr}`; }); 
-        })
+                .data(lap_data_dots)
+                .join("text")
+                .attr("class", "dot_labels")
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible")// Hide dot if first lap position is 0
+                .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.3) : 1)
+                .attr("x", function (d) { return x(d.lap) + 8; })
+                .attr("y", function (d) { return y(d.pos) + 4; })
+                .text(function (d) { return `${d.abbr}`; });
+        });
 }
 
 function adjust_x_axis_pos_plot(total_laps) {
