@@ -256,7 +256,7 @@ function render_globe(globe_data, circuit_geo_data) {
     async function worldTour(circuit_geo_data, projection) {
 
         const tilt = 20;
-        const duration = 2000; // Increase duration for smoother animation
+        const duration = 1750; 
     
         for (let i = 0; i < circuit_geo_data.length - 1; i++) {
             if (!rotationAllowed) break; // Check if animation should stop

@@ -158,7 +158,20 @@ function update_driver_pos_first_lap(year, round_number) {
                 .style("opacity", d => window.anyHighlighted ? (window.highlightedDrivers[d.abbr] ? 1 : 0.2) : 1)
                 .style("stroke", "#636363")
                 .style("stroke-width", 0.2)
-                .style("visibility", d => d.pos === 0 ? "hidden" : "visible"); // Hide dot if first lap position is 0
+                .style("visibility", d => d.pos === 0 ? "hidden" : "visible") // Hide dot if first lap position is 0
+                .on("mouseover", function (event, d) {
+                    const bbox = this.getBoundingClientRect();
+                    driver_tooltip
+                        .style("left", `${bbox.left + bbox.width / 2 + 30}px`) 
+                        .style("top", `${bbox.bottom - 30}px`)              
+                        .style("display", "block")
+                        .html(`<span class="tooltip-bold">${d.first_name} ${d.last_name}</span><br>
+                              <span class="tooltip-regular">${d.team_name} <br>
+                              Current Position: ${d.pos}</span>`);
+                })
+                .on("mouseout", function () {
+                    driver_tooltip.style("display", "none");
+                });
 
 
             svg.selectAll(".dot_labels")
@@ -225,7 +238,7 @@ function update_driver_pos_chart(year, round_number, lap) {
                     const bbox = this.getBoundingClientRect();
                     driver_tooltip
                         .style("left", `${bbox.left + bbox.width / 2 + 30}px`) 
-                        .style("top", `${bbox.bottom}px`)              
+                        .style("top", `${bbox.bottom-30}px`)              
                         .style("display", "block")
                         .html(`<span class="tooltip-bold">${d.first_name} ${d.last_name}</span><br>
                               <span class="tooltip-regular">${d.team_name} <br>
