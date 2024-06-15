@@ -13,6 +13,10 @@ python3 -m venv f1venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
+5. Fetch all data files from github
+```
+git lfs pull
+```
 4. Run the flask app from E3
 ``` 
 cd E3
